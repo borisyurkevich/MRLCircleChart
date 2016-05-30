@@ -54,14 +54,16 @@ public class Chart: UIView {
   @IBInspectable public var chartBackgroundColor: UIColor = UIColor(white: 0.7, alpha: 0.66)
   @IBInspectable public var beginColor: UIColor?
   @IBInspectable public var endColor: UIColor?
+  @IBInspectable public var inactiveBeginColor = UIColor.inactiveBeginColor()
+  @IBInspectable public var inactiveEndColor = UIColor.inactiveEndColor()
   
   //MARK: - Private variables
 
   private let chartContainer = UIView()
   private var chartBackgroundSegment: SegmentLayer?
   private var chartSegmentLayers: [SegmentLayer] = []
-  private var colorPallette: [UIColor] = []
-  private var grayscalePallette: [UIColor] = []
+  private var colorPalette: [UIColor] = []
+  private var grayscalePalette: [UIColor] = []
 
   //MARK: - Initializers
 
@@ -143,24 +145,24 @@ public class Chart: UIView {
   }
 
   /**
-   Setups `colorPallette` based on `beginColor` and `endColor`. Also setups
-   `grayscalePallette` if not yet set up.
+   Setups `colorPalette` based on `beginColor` and `endColor`. Also setups
+   `grayscalePalette`.
    */
-  private func setupColorPallettes() {
+  private func setupColorPalettes() {
 
     guard let source = dataSource else {
       return
     }
 
-    colorPallette = UIColor.colorRange(
+    colorPalette = UIColor.colorRange(
       beginColor: beginColor!,
       endColor: endColor!,
       count: source.numberOfItems()
     )
 
-    grayscalePallette = UIColor.colorRange(
-      beginColor: UIColor(white: 0.6, alpha: 0.5),
-      endColor: UIColor(white: 0.2, alpha: 0.5),
+    grayscalePalette = UIColor.colorRange(
+      beginColor: inactiveBeginColor,
+      endColor: inactiveEndColor,
       count: source.numberOfItems()
     )
   }
@@ -179,7 +181,7 @@ public class Chart: UIView {
       return
     }
 
-    setupColorPallettes()
+    setupColorPalettes()
     setupChartContainerIfNeeded()
 
     let refNumber = max(source.numberOfItems(), chartSegmentLayers.count)
@@ -197,7 +199,7 @@ public class Chart: UIView {
           start: source.startAngle(index),
           end: source.endAngle(index),
           lineWidth: lineWidth,
-          color: colorPallette[index].CGColor
+          color: colorPalette[index].CGColor
         )
         chartContainer.layer.addSublayer(layer)
         chartSegmentLayers.append(layer)
@@ -216,7 +218,7 @@ public class Chart: UIView {
 
       layer.startAngle = source.startAngle(index)
       layer.endAngle = source.endAngle(index)
-      layer.color = colorPallette[index].CGColor
+      layer.color = colorPalette[index].CGColor
     }
 
     initialAnimationComplete = true
@@ -404,12 +406,22 @@ public class Chart: UIView {
 
       for (index, layer) in chartSegmentLayers.enumerate() {
         if select {
-          layer.color = layer.containsPoint(point) ? colorPallette[index].CGColor : grayscalePallette[index].CGColor
+          layer.color = layer.containsPoint(point) ? colorPalette[index].CGColor : grayscalePalette[index].CGColor
         } else {
-          layer.color = colorPallette[index].CGColor
+          layer.color = colorPalette[index].CGColor
         }
       }
       break
     }
+  }
+}
+
+private extension UIColor {
+  static func inactiveBeginColor() -> UIColor {
+    return UIColor(white: 0.5, alpha: 1.0)
+  }
+  
+  static func inactiveEndColor() -> UIColor {
+    return UIColor(white: 0.15, alpha: 1.0)
   }
 }
