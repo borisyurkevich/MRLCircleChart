@@ -51,6 +51,7 @@ public class Chart: UIView {
   //MARK: - Public Inspectables
 
   @IBInspectable public var lineWidth: CGFloat = 25
+  @IBInspectable public var padding: CGFloat = 0
   @IBInspectable public var chartBackgroundColor: UIColor = UIColor(white: 0.7, alpha: 0.66)
   @IBInspectable public var beginColor: UIColor?
   @IBInspectable public var endColor: UIColor?
@@ -134,7 +135,7 @@ public class Chart: UIView {
     if let backgroundSegment = chartBackgroundSegment {
       backgroundSegment.frame = chartContainer.bounds
     } else {
-      chartBackgroundSegment = SegmentLayer(frame: chartContainer.bounds, start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, color: chartBackgroundColor.CGColor)
+      chartBackgroundSegment = SegmentLayer(frame: chartContainer.bounds, start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.CGColor)
       chartContainer.layer.insertSublayer(chartBackgroundSegment!, atIndex:0)
     }
 
@@ -199,6 +200,7 @@ public class Chart: UIView {
           start: source.startAngle(index),
           end: source.endAngle(index),
           lineWidth: lineWidth,
+          padding: padding,
           color: colorPalette[index].CGColor
         )
         chartContainer.layer.addSublayer(layer)
@@ -219,6 +221,8 @@ public class Chart: UIView {
       layer.startAngle = source.startAngle(index)
       layer.endAngle = source.endAngle(index)
       layer.color = colorPalette[index].CGColor
+      layer.lineWidth = lineWidth
+      layer.padding = padding
     }
 
     initialAnimationComplete = true
@@ -274,7 +278,7 @@ public class Chart: UIView {
     }
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
-      let segment = SegmentLayer(frame: self.chartContainer.bounds, start: 0, end: fromAngle, lineWidth: self.lineWidth, color: color.CGColor)
+      let segment = SegmentLayer(frame: self.chartContainer.bounds, start: 0, end: fromAngle, lineWidth: self.lineWidth, padding: self.padding, color: color.CGColor)
       segment.capType = .BothEnds
       segment.animationDuration = duration
 
@@ -388,6 +392,7 @@ public class Chart: UIView {
       for layer in chartSegmentLayers {
         layer.selected = layer.containsPoint(point) ? !layer.selected : false
         layer.lineWidth = layer.selected ? lineWidth + 20 : lineWidth
+        layer.padding = layer.selected ? padding - 20 : padding
       }
       break
     case .DesaturateNonSelected:

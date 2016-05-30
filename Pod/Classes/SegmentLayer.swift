@@ -40,12 +40,14 @@ class SegmentLayer: CALayer {
     static let colorKey = "color"
     static let capType = "capType"
     static let boundsKey = "bounds"
+    static let paddingKey = "padding"
 
     static let animatableProperties = [
       colorKey,
       startAngleKey,
       endAngleKey,
-      lineWidthKey
+      lineWidthKey,
+      paddingKey
     ]
   }
   /**
@@ -61,6 +63,7 @@ class SegmentLayer: CALayer {
   @NSManaged var endAngle: CGFloat
   @NSManaged var lineWidth: CGFloat
   @NSManaged var color: CGColorRef
+  @NSManaged var padding: CGFloat
 
   var animationDuration: Double = Constants.animationDuration
 
@@ -85,7 +88,7 @@ class SegmentLayer: CALayer {
    - returns: a fully configured `SegmentLayer` instance
    */
 
-  required init(frame: CGRect, start: CGFloat, end: CGFloat, lineWidth: CGFloat, color: CGColorRef) {
+  required init(frame: CGRect, start: CGFloat, end: CGFloat, lineWidth: CGFloat, padding: CGFloat = 0, color: CGColorRef) {
     super.init()
 
     self.frame = frame
@@ -93,6 +96,7 @@ class SegmentLayer: CALayer {
     self.endAngle = end
     self.lineWidth = lineWidth
     self.color = color
+    self.padding = padding
 
     self.commonInit()
   }
@@ -111,7 +115,7 @@ class SegmentLayer: CALayer {
    Common initialization point, to be used for any operation that are common
    to all initializers and can be performed after `self` is available.
    */
-  func commonInit() {
+  private func commonInit() {
     contentsScale = UIScreen.mainScreen().scale
   }
 
@@ -133,7 +137,7 @@ class SegmentLayer: CALayer {
   override func actionForKey(event: String) -> CAAction? {
 
     let shouldSkipAnimationOnEntry = superlayer == nil
-      && (PropertyKeys.lineWidthKey == event)
+      && (PropertyKeys.lineWidthKey == event || PropertyKeys.paddingKey == event)
 
     if event == PropertyKeys.colorKey {
       return animationForColor()
@@ -263,7 +267,7 @@ class SegmentLayer: CALayer {
 
     let pointOnCircle = point(center)
 
-    let outerRadius = bounds.width / 2
+    let outerRadius = bounds.width / 2 - padding
     let innerRadius = outerRadius - lineWidth
     
     let innerStartPoint = pointOnCircle(innerRadius, startAngle)
