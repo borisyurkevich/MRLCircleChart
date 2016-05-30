@@ -5,8 +5,8 @@ before_install:
 - gem install cocoapods
 - pod install --project-directory=Example
 script:
-- xcodebuild -workspace Example/MRLCircleChart.xcworkspace -scheme MRLCircleChart-Example
-  -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO
+- set -o pipefail
+- xcodebuild -workspace Example/MRLCircleChart.xcworkspace -scheme MRLCircleChart-Example -sdk iphonesimulator9.3 ONLY_ACTIVE_ARCH=NO | xcpretty
 notifications:
   slack:
     rooms:
