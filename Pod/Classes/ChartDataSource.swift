@@ -102,7 +102,7 @@ extension DataSource {
   }
 
   func arcAngle(index: Int) -> CGFloat {
-    guard let segment = item(index) else {
+    guard let segment = item(index) where maxValue() > 0 else {
       return 0
     }
     let angle = segment.value / maxValue() * 2 * M_PI
