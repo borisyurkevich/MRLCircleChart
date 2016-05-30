@@ -156,7 +156,7 @@ class SegmentLayer: CALayer {
   /**
    Helper function to generate similar `CAAnimations` easily
    */
-  func animation(key: String, toValue: AnyObject, fromValue: AnyObject) -> CABasicAnimation {
+  func animation(key: String, toValue: AnyObject?, fromValue: AnyObject) -> CABasicAnimation {
     let animation = CABasicAnimation(keyPath: key)
     animation.duration = animationDuration
     animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
@@ -170,34 +170,32 @@ class SegmentLayer: CALayer {
    Provides an animation tailored for the start- and endAngle properties.
    */
   func animationForAngle(key: String) -> CAAction {
-    let animation = CABasicAnimation(keyPath: key)
-    animation.duration = animationDuration
-    animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-
+    
+    var fromValue: AnyObject
+    
     if let value = presentationLayer()?.valueForKey(key) {
-      animation.fromValue = value
+      fromValue = value
     } else {
-      animation.fromValue = CGFloat(M_PI) * 2
+      fromValue = CGFloat(M_PI) * 2
     }
-
-    return animation
+    
+    return animation(key, toValue:nil, fromValue:fromValue)
   }
 
   /**
    Provides an animation tailored for the color property.
    */
   func animationForColor() -> CAAction {
-    let animation = CABasicAnimation(keyPath: PropertyKeys.colorKey)
-    animation.duration = animationDuration
-    animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
-
+    
+    var fromValue: AnyObject
+    
     if let value = presentationLayer()?.valueForKey(PropertyKeys.colorKey) {
-      animation.fromValue = value
+      fromValue = value
     } else {
-      animation.fromValue = self.color
+      fromValue = self.color
     }
-
-    return animation
+    
+    return animation(PropertyKeys.colorKey, toValue:nil, fromValue: fromValue)
   }
 
   /**
