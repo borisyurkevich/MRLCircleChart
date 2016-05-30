@@ -174,7 +174,9 @@
 				510602908078C69C2BC784C6EFE890D6 /* Products */,
 				C8D8EB2A6257430680A425D563E51D8C /* Targets Support Files */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		9FD71F8E2B6B1D747941E208B48A694B /* Classes */ = {
 			isa = PBXGroup;
