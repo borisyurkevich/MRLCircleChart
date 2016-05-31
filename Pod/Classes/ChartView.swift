@@ -273,7 +273,9 @@ public class Chart: UIView {
 
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
         segment.removeFromSuperlayer()
-        self.chartSegmentLayers.removeFirst()
+        if let index = self.chartSegmentLayers.indexOf(segment) {
+          self.chartSegmentLayers.removeAtIndex(index)
+        }
       })
     }
 
