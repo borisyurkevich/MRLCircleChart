@@ -30,8 +30,7 @@ import UIKit
 private enum ChartProperties {
   static let dataSourceKey = "dataSource"
   static let maxAngleKey = "maxAngle"
-  static let innerRadiusKey = "innerRadius"
-  static let outerRadiusKey = "outerRadius"
+  static let lineWidthKey = "lineWidth"
 }
 
 /**
@@ -51,25 +50,21 @@ public class Chart: UIView {
 
   //MARK: - Public Inspectables
 
-  @IBInspectable public var innerRadius: CGFloat = 0
-  @IBInspectable public var outerRadius: CGFloat = 0
+  @IBInspectable public var lineWidth: CGFloat = 25
+  @IBInspectable public var padding: CGFloat = 0
   @IBInspectable public var chartBackgroundColor: UIColor = UIColor(white: 0.7, alpha: 0.66)
-  @IBInspectable public var beginColor: UIColor? {
-    didSet { reloadData() }
-  }
-  @IBInspectable public var endColor: UIColor? {
-    didSet { reloadData() }
-  }
-
+  @IBInspectable public var beginColor: UIColor?
+  @IBInspectable public var endColor: UIColor?
+  @IBInspectable public var inactiveBeginColor = UIColor.inactiveBeginColor()
+  @IBInspectable public var inactiveEndColor = UIColor.inactiveEndColor()
+  
   //MARK: - Private variables
 
   private let chartContainer = UIView()
   private var chartBackgroundSegment: SegmentLayer?
   private var chartSegmentLayers: [SegmentLayer] = []
-  private var outerRadiusRatio: CGFloat = 0.0
-  private var innerRadiusRatio: CGFloat = 0.0
-  private var colorPallette: [UIColor] = []
-  private var grayscalePallette: [UIColor] = []
+  private var colorPalette: [UIColor] = []
+  private var grayscalePalette: [UIColor] = []
 
   //MARK: - Initializers
 
@@ -86,10 +81,7 @@ public class Chart: UIView {
    - parameter frame:       frame used to display the chart view; since chart
    itself requires square bounds, the greates square frame that fits in the
    frame is derived and centered in chart frame
-   - parameter innerRadius: if larger than 0, defines the radius of an inner
-   'hole' in the chart
-   - parameter outerRadius: defines the outer radius of the chart, should be
-   greater than `innerRadius`
+   - parameter lineWidth:   the width of chart's line
    - parameter dataSource:  `DataSource` complying object that provides all
    data details for the chart view
    - parameter beginColor:  color of the first chart segment layer
@@ -97,9 +89,8 @@ public class Chart: UIView {
 
    - returns: fully configured chart view
    */
-  public required init(frame: CGRect, innerRadius: CGFloat, outerRadius: CGFloat, dataSource: DataSource, beginColor: UIColor = UIColor.greenColor(), endColor: UIColor = UIColor.yellowColor()) {
-    self.innerRadius = innerRadius
-    self.outerRadius = outerRadius
+  public required init(frame: CGRect, lineWidth: CGFloat, dataSource: DataSource, beginColor: UIColor = UIColor.greenColor(), endColor: UIColor = UIColor.yellowColor()) {
+    self.lineWidth = lineWidth
     self.dataSource = dataSource
     self.beginColor = beginColor
     self.endColor = endColor
@@ -133,27 +124,19 @@ public class Chart: UIView {
     let squareSide = min(frame.size.width, frame.size.height)
     let squaredBounds = CGRect(origin: CGPointZero, size: CGSize(width: squareSide, height: squareSide))
 
-    chartContainer.bounds = squaredBounds
-    chartContainer.center = bounds.center()
-
     if chartContainer.superview == nil {
       chartContainer.transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
-
       addSubview(chartContainer)
-
-      if chartBackgroundSegment == nil {
-        chartBackgroundSegment = SegmentLayer(frame: chartContainer.frame, start: 0, end: CGFloat(M_PI * 2), outerRadius: outerRadius, innerRadius: innerRadius, color: chartBackgroundColor.CGColor)
-        self.layer.insertSublayer(chartBackgroundSegment!, below: chartContainer.layer)
-      }
-
     }
 
-    if outerRadiusRatio == 0 {
-      outerRadiusRatio = outerRadius / (chartContainer.frame.size.width / 2)
-    }
-
-    if innerRadiusRatio == 0 {
-      innerRadiusRatio = innerRadius / (chartContainer.frame.size.width / 2)
+    chartContainer.bounds = squaredBounds
+    chartContainer.center = bounds.center()
+    
+    if let backgroundSegment = chartBackgroundSegment {
+      backgroundSegment.frame = chartContainer.bounds
+    } else {
+      chartBackgroundSegment = SegmentLayer(frame: chartContainer.bounds, start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.CGColor)
+      chartContainer.layer.insertSublayer(chartBackgroundSegment!, atIndex:0)
     }
 
     for layer in chartSegmentLayers {
@@ -163,24 +146,24 @@ public class Chart: UIView {
   }
 
   /**
-   Setups `colorPallette` based on `beginColor` and `endColor`. Also setups
-   `grayscalePallette` if not yet set up.
+   Setups `colorPalette` based on `beginColor` and `endColor`. Also setups
+   `grayscalePalette`.
    */
-  private func setupColorPallettes() {
+  private func setupColorPalettes() {
 
     guard let source = dataSource else {
       return
     }
 
-    colorPallette = UIColor.colorRange(
+    colorPalette = UIColor.colorRange(
       beginColor: beginColor!,
       endColor: endColor!,
       count: source.numberOfItems()
     )
 
-    grayscalePallette = UIColor.colorRange(
-      beginColor: UIColor(white: 0.6, alpha: 0.5),
-      endColor: UIColor(white: 0.2, alpha: 0.5),
+    grayscalePalette = UIColor.colorRange(
+      beginColor: inactiveBeginColor,
+      endColor: inactiveEndColor,
       count: source.numberOfItems()
     )
   }
@@ -199,7 +182,7 @@ public class Chart: UIView {
       return
     }
 
-    setupColorPallettes()
+    setupColorPalettes()
     setupChartContainerIfNeeded()
 
     let refNumber = max(source.numberOfItems(), chartSegmentLayers.count)
@@ -216,9 +199,9 @@ public class Chart: UIView {
           frame: chartContainer.bounds,
           start: source.startAngle(index),
           end: source.endAngle(index),
-          outerRadius: outerRadius,
-          innerRadius: innerRadius,
-          color: colorPallette[index].CGColor
+          lineWidth: lineWidth,
+          padding: padding,
+          color: colorPalette[index].CGColor
         )
         chartContainer.layer.addSublayer(layer)
         chartSegmentLayers.append(layer)
@@ -237,7 +220,9 @@ public class Chart: UIView {
 
       layer.startAngle = source.startAngle(index)
       layer.endAngle = source.endAngle(index)
-      layer.color = colorPallette[index].CGColor
+      layer.color = colorPalette[index].CGColor
+      layer.lineWidth = lineWidth
+      layer.padding = padding
     }
 
     initialAnimationComplete = true
@@ -288,12 +273,14 @@ public class Chart: UIView {
 
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
         segment.removeFromSuperlayer()
-        self.chartSegmentLayers.removeFirst()
+        if let index = self.chartSegmentLayers.indexOf(segment) {
+          self.chartSegmentLayers.removeAtIndex(index)
+        }
       })
     }
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
-      let segment = SegmentLayer(frame: self.chartContainer.bounds, start: 0, end: fromAngle, outerRadius: self.outerRadius, innerRadius: self.innerRadius, color: color.CGColor)
+      let segment = SegmentLayer(frame: self.chartContainer.bounds, start: 0, end: fromAngle, lineWidth: self.lineWidth, padding: self.padding, color: color.CGColor)
       segment.capType = .BothEnds
       segment.animationDuration = duration
 
@@ -406,7 +393,8 @@ public class Chart: UIView {
     case .Grow:
       for layer in chartSegmentLayers {
         layer.selected = layer.containsPoint(point) ? !layer.selected : false
-        layer.outerRadius = layer.selected ? outerRadius + 20 : outerRadius
+        layer.lineWidth = layer.selected ? lineWidth + 20 : lineWidth
+        layer.padding = layer.selected ? padding - 20 : padding
       }
       break
     case .DesaturateNonSelected:
@@ -425,12 +413,22 @@ public class Chart: UIView {
 
       for (index, layer) in chartSegmentLayers.enumerate() {
         if select {
-          layer.color = layer.containsPoint(point) ? colorPallette[index].CGColor : grayscalePallette[index].CGColor
+          layer.color = layer.containsPoint(point) ? colorPalette[index].CGColor : grayscalePalette[index].CGColor
         } else {
-          layer.color = colorPallette[index].CGColor
+          layer.color = colorPalette[index].CGColor
         }
       }
       break
     }
+  }
+}
+
+private extension UIColor {
+  static func inactiveBeginColor() -> UIColor {
+    return UIColor(white: 0.5, alpha: 1.0)
+  }
+  
+  static func inactiveEndColor() -> UIColor {
+    return UIColor(white: 0.15, alpha: 1.0)
   }
 }
