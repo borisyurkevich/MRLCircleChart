@@ -4,6 +4,7 @@
 [![Version](https://img.shields.io/cocoapods/v/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 [![License](https://img.shields.io/cocoapods/l/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 [![Platform](https://img.shields.io/cocoapods/p/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
+[![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
 ## Demo
 
