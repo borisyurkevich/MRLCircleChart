@@ -177,7 +177,7 @@ public class Chart: UIView {
   /**
    Querries the `dataSource` for data and inserts, removes, or updates all relevant segments.
    */
-  final public func reloadData() {
+  final public func reloadData(completion: () -> () = {}) {
     guard let source = dataSource else {
       return
     }
@@ -187,6 +187,8 @@ public class Chart: UIView {
 
     let refNumber = max(source.numberOfItems(), chartSegmentLayers.count)
 
+    CATransaction.begin()
+    CATransaction.setCompletionBlock(completion)
     for index in 0..<refNumber {
       guard let _ = source.item(index) else {
         let targetAngle = source.maxValue > source.totalValue() ? source.startAngle(index) : CGFloat(M_PI * 2)
@@ -227,6 +229,7 @@ public class Chart: UIView {
 
     initialAnimationComplete = true
     reassignSegmentLayerscapTypes()
+    CATransaction.commit()
   }
 
   public func animateSegments(color: UIColor?, startAngle: CGFloat?, endAngle: CGFloat?, completion: () -> () = {}) {
