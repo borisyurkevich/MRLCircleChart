@@ -43,11 +43,11 @@ class SegmentLayer: CALayer {
     static let paddingKey = "padding"
 
     static let animatableProperties = [
-      colorKey,
-      startAngleKey,
-      endAngleKey,
-      lineWidthKey,
-      paddingKey
+      colorKey, startAngleKey, endAngleKey, lineWidthKey, paddingKey
+    ]
+    
+    static let needsDisplayProperties = [
+      startAngleKey, endAngleKey, lineWidthKey, colorKey, capType, boundsKey, paddingKey
     ]
   }
   /**
@@ -243,9 +243,7 @@ class SegmentLayer: CALayer {
   }
 
   override class func needsDisplayForKey(key: String) -> Bool {
-    if PropertyKeys.animatableProperties.contains(key)
-      || key == PropertyKeys.capType
-      || key == PropertyKeys.boundsKey {
+    if PropertyKeys.needsDisplayProperties.contains(key) {
       return true
     }
     return super.needsDisplayForKey(key)
