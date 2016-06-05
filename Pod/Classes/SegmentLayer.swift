@@ -259,8 +259,8 @@ class SegmentLayer: CALayer {
   //MARK: - Hit Testing
 
   override func containsPoint(point: CGPoint) -> Bool {
-    return pathContainsPoint(capPath(startAngle, start: true), point: point)
-      || pathContainsPoint(capPath(endAngle, start: false), point: point)
+    return ([.BothEnds, .Begin].contains(capType) && pathContainsPoint(capPath(startAngle, start: true), point: point))
+      || ([.BothEnds, .End].contains(capType) && pathContainsPoint(capPath(endAngle, start: false), point: point))
       || pathContainsPoint(baseSegmentPath(), point: point)
   }
 }
@@ -301,6 +301,14 @@ extension SegmentLayer {
     drawPath(ctx, path: capPath(angle, start: start))
   }
 
+  /**
+   Provides path for either begin or end cap
+   
+   - parameter angle: angle at which to attach the cap
+   - parameter start: determines the `clockwise` parameter for path drawing, pass `true` if adding cap to the beggining of the base segment
+   
+   - returns: path for drawing the defined cap
+   */
   private func capPath(angle: CGFloat, start: Bool) -> CGPathRef {
     let capRadius = abs(outerRadius - innerRadius) / 2
     let capCenterDistance = outerRadius - capRadius
@@ -355,6 +363,11 @@ extension SegmentLayer {
     return path.CGPath
   }
 
+  /**
+   Checks that a given CGPathRef contains a given CGPoint.
+   
+   - returns: `true` if `point` is contained by the `path`
+   */
   private func pathContainsPoint(path: CGPathRef, point: CGPoint) -> Bool {
     var transform = CGAffineTransformIdentity
     return withUnsafePointer(&transform, { (pointer: UnsafePointer<CGAffineTransform>) -> Bool in
