@@ -43,11 +43,11 @@ class SegmentLayer: CALayer {
     static let paddingKey = "padding"
 
     static let animatableProperties = [
-      colorKey,
-      startAngleKey,
-      endAngleKey,
-      lineWidthKey,
-      paddingKey
+      colorKey, startAngleKey, endAngleKey, lineWidthKey, paddingKey
+    ]
+    
+    static let needsDisplayProperties = [
+      startAngleKey, endAngleKey, lineWidthKey, colorKey, capType, boundsKey, paddingKey
     ]
   }
   /**
@@ -69,11 +69,26 @@ class SegmentLayer: CALayer {
 
   @objc
   enum SegmentCapType: Int {
-    case None, Begin, End, Middle, BothEnds
+    case None, Begin, End, BothEnds
   }
 
   @NSManaged var capType: SegmentCapType
 
+  
+  //MARK: - Computed Properties
+  
+  var outerRadius: CGFloat {
+    return bounds.width / 2 - padding
+  }
+  
+  var innerRadius: CGFloat {
+    return outerRadius - lineWidth
+  }
+  
+  var center: CGPoint {
+    return bounds.center()
+  }
+  
   /**
    Default initialized for `SegmentLayer`, provides all necessary customization
    points.
@@ -228,9 +243,7 @@ class SegmentLayer: CALayer {
   }
 
   override class func needsDisplayForKey(key: String) -> Bool {
-    if PropertyKeys.animatableProperties.contains(key)
-      || key == PropertyKeys.capType
-      || key == PropertyKeys.boundsKey {
+    if PropertyKeys.needsDisplayProperties.contains(key) {
       return true
     }
     return super.needsDisplayForKey(key)
@@ -239,10 +252,78 @@ class SegmentLayer: CALayer {
   //MARK: - Drawing
 
   override func drawInContext(ctx: CGContext) {
+    drawBaseSegment(ctx)
+    drawCaps(ctx)
+  }
+
+  //MARK: - Hit Testing
+
+  override func containsPoint(point: CGPoint) -> Bool {
+    return ([.BothEnds, .Begin].contains(capType) && pathContainsPoint(capPath(startAngle, start: true), point: point))
+      || ([.BothEnds, .End].contains(capType) && pathContainsPoint(capPath(endAngle, start: false), point: point))
+      || pathContainsPoint(baseSegmentPath(), point: point)
+  }
+}
+
+/**
+ Provides SegmentLayer with path-calculations
+ */
+extension SegmentLayer {
+  private func drawBaseSegment(ctx: CGContext) {
+    drawPath(ctx, path: baseSegmentPath())
+  }
+
+  private func drawCaps(ctx: CGContext) {
+    if [.BothEnds, .Begin].contains(capType) {
+      drawCap(ctx, angle: startAngle, start: true)
+    }
+
+    if [.BothEnds, .End].contains(capType) {
+      drawCap(ctx, angle: endAngle, start: false)
+    }
+  }
+
+  private func drawPath(ctx: CGContext, path: CGPath) {
     CGContextBeginPath(ctx)
-    CGContextAddPath(ctx, path())
+    CGContextAddPath(ctx, path)
     CGContextSetFillColorWithColor(ctx, color)
     CGContextDrawPath(ctx, .Fill)
+  }
+
+  private func pointOnCircle(center: CGPoint, radius: CGFloat, angle: CGFloat) -> CGPoint {
+    return CGPoint(
+      x: center.x + radius * cos(angle),
+      y: center.y + radius * sin(angle)
+    )
+  }
+
+  private func drawCap(ctx: CGContext, angle: CGFloat, start: Bool) {
+    drawPath(ctx, path: capPath(angle, start: start))
+  }
+
+  /**
+   Provides path for either begin or end cap
+   
+   - parameter angle: angle at which to attach the cap
+   - parameter start: determines the `clockwise` parameter for path drawing, pass `true` if adding cap to the beggining of the base segment
+   
+   - returns: path for drawing the defined cap
+   */
+  private func capPath(angle: CGFloat, start: Bool) -> CGPathRef {
+    let capRadius = abs(outerRadius - innerRadius) / 2
+    let capCenterDistance = outerRadius - capRadius
+    let capStartAngle =  CGFloat(M_PI) + angle
+    let capEndAngle = CGFloat(M_PI * 2) + angle
+    let arcCenter = pointOnCircle(center, radius: capCenterDistance, angle: angle)
+    let path = UIBezierPath(
+      arcCenter: arcCenter,
+      radius: capRadius,
+      startAngle: capStartAngle,
+      endAngle: capEndAngle,
+      clockwise: start
+    )
+
+    return path.CGPath
   }
 
   /**
@@ -250,47 +331,18 @@ class SegmentLayer: CALayer {
    hit testing. Radii and angle properties together with layer's bounds are used
    to calculate the path.
    */
-  func path() -> CGPathRef {
+  private func baseSegmentPath() -> CGPathRef {
 
     let center = bounds.center()
 
-    func point(center: CGPoint) -> (CGFloat, CGFloat) -> CGPoint {
-      return {(radius: CGFloat, angle: CGFloat) -> CGPoint in
-        return CGPoint(
-          x: center.x + radius * cos(angle),
-          y: center.y + radius * sin(angle)
-        )
-      }
-    }
-
-    let pointOnCircle = point(center)
-
-    let outerRadius = bounds.width / 2 - padding
-    let innerRadius = outerRadius - lineWidth
-    
-    let innerStartPoint = pointOnCircle(innerRadius, startAngle)
-    let outerStartPoint = pointOnCircle(outerRadius, startAngle)
-    let innerEndPoint = pointOnCircle(innerRadius, endAngle)
-
-    func addCapToPath(path: UIBezierPath, angle: CGFloat, start: Bool) {
-      let capRadius = abs(outerRadius - innerRadius) / 2
-      let capCenterDistance = outerRadius - capRadius
-      let capStartAngle =  CGFloat(M_PI) + angle
-      let capEndAngle = CGFloat(M_PI * 2) + angle
-      path.addArcWithCenter(pointOnCircle(capCenterDistance, angle), radius: capRadius, startAngle: capStartAngle, endAngle: capEndAngle, clockwise: start)
-    }
+    let innerStartPoint = pointOnCircle(center, radius: innerRadius, angle: startAngle)
+    let outerStartPoint = pointOnCircle(center, radius: outerRadius, angle: startAngle)
+    let innerEndPoint = pointOnCircle(center, radius: innerRadius, angle: endAngle)
 
     let path = UIBezierPath()
 
     path.moveToPoint(innerStartPoint)
-
-    switch capType {
-    case .BothEnds, .Begin:
-      addCapToPath(path, angle: startAngle, start: true)
-    default:
-      path.addLineToPoint(outerStartPoint)
-    }
-
+    path.addLineToPoint(outerStartPoint)
     path.addArcWithCenter(
       center,
       radius: outerRadius,
@@ -299,13 +351,7 @@ class SegmentLayer: CALayer {
       clockwise: true
     )
 
-    switch capType {
-    case .BothEnds, .End:
-      addCapToPath(path, angle: endAngle, start: false)
-    default:
-      path.addLineToPoint(innerEndPoint)
-    }
-
+    path.addLineToPoint(innerEndPoint)
     path.addArcWithCenter(
       center,
       radius: innerRadius,
@@ -317,12 +363,15 @@ class SegmentLayer: CALayer {
     return path.CGPath
   }
 
-  //MARK: - Hit Testing
-
-  override func containsPoint(point: CGPoint) -> Bool {
+  /**
+   Checks that a given CGPathRef contains a given CGPoint.
+   
+   - returns: `true` if `point` is contained by the `path`
+   */
+  private func pathContainsPoint(path: CGPathRef, point: CGPoint) -> Bool {
     var transform = CGAffineTransformIdentity
     return withUnsafePointer(&transform, { (pointer: UnsafePointer<CGAffineTransform>) -> Bool in
-      CGPathContainsPoint(path(), pointer, point, false)
+      CGPathContainsPoint(path, pointer, point, false)
     })
   }
 }

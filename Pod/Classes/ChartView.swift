@@ -309,14 +309,14 @@ public class Chart: UIView {
         segment.capType = .None
       } else {
         switch index {
-        case 0:
-          segment.capType = chartSegmentLayers.count == 1 ? .BothEnds : .Begin
+        case 0 where chartSegmentLayers.count > 1:
+          segment.capType = .Begin
+        case 0 where chartSegmentLayers.count == 0:
+          segment.capType = .BothEnds
         case chartSegmentLayers.count - 1 where chartSegmentLayers.count > 1:
           segment.capType = .End
-          segment.removeFromSuperlayer()
-          chartContainer.layer.addSublayer(segment)
         default:
-          segment.capType = .Middle
+          segment.capType = .None
         }
       }
     }
