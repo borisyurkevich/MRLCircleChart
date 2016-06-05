@@ -165,12 +165,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "MRLCircleChart_Example" */;
 			buildPhases = (
-				4B0538D63FA0E627E2284B83 /* 📦 Check Pods Manifest.lock */,
+				4B0538D63FA0E627E2284B83 /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				B53EEF684BF7398ECC0545C8 /* 📦 Embed Pods Frameworks */,
-				71020D8FF7DF45F6FAFFBECF /* 📦 Copy Pods Resources */,
+				B53EEF684BF7398ECC0545C8 /* [CP] Embed Pods Frameworks */,
+				71020D8FF7DF45F6FAFFBECF /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -185,12 +185,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "MRLCircleChart_Tests" */;
 			buildPhases = (
-				0B5A1010411E1D3E13B3F55F /* 📦 Check Pods Manifest.lock */,
+				0B5A1010411E1D3E13B3F55F /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
-				D208B0F28F23C9691F67EA1E /* 📦 Embed Pods Frameworks */,
-				8F78F35D797E2B589E519E40 /* 📦 Copy Pods Resources */,
+				D208B0F28F23C9691F67EA1E /* [CP] Embed Pods Frameworks */,
+				8F78F35D797E2B589E519E40 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -261,14 +261,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0B5A1010411E1D3E13B3F55F /* 📦 Check Pods Manifest.lock */ = {
+		0B5A1010411E1D3E13B3F55F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,14 +276,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		4B0538D63FA0E627E2284B83 /* 📦 Check Pods Manifest.lock */ = {
+		4B0538D63FA0E627E2284B83 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,14 +291,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		71020D8FF7DF45F6FAFFBECF /* 📦 Copy Pods Resources */ = {
+		71020D8FF7DF45F6FAFFBECF /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -306,14 +306,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MRLCircleChart_Example/Pods-MRLCircleChart_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F78F35D797E2B589E519E40 /* 📦 Copy Pods Resources */ = {
+		8F78F35D797E2B589E519E40 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -321,14 +321,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MRLCircleChart_Tests/Pods-MRLCircleChart_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B53EEF684BF7398ECC0545C8 /* 📦 Embed Pods Frameworks */ = {
+		B53EEF684BF7398ECC0545C8 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -336,14 +336,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MRLCircleChart_Example/Pods-MRLCircleChart_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D208B0F28F23C9691F67EA1E /* 📦 Embed Pods Frameworks */ = {
+		D208B0F28F23C9691F67EA1E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
