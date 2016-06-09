@@ -331,7 +331,7 @@ public class Chart: UIView {
         switch index {
         case 0 where chartSegmentLayers.count > 1:
           segment.capType = .Begin
-        case 0 where chartSegmentLayers.count == 0:
+        case 0 where chartSegmentLayers.count == 1:
           segment.capType = .BothEnds
         case chartSegmentLayers.count - 1 where chartSegmentLayers.count > 1:
           segment.capType = .End
