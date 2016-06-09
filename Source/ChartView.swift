@@ -227,6 +227,11 @@ public class Chart: UIView {
       layer.padding = padding
     }
 
+    for index in indexesToRemove.reverse() {
+      let targetAngle = source.maxValue > source.totalValue() ? source.startAngle(index) : CGFloat(M_PI * 2)
+      remove(index, startAngle: targetAngle, endAngle: targetAngle, animated: animated)
+    }
+    
     initialAnimationComplete = true
     reassignSegmentLayerscapTypes()
     CATransaction.commit()
