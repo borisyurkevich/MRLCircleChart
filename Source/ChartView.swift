@@ -246,6 +246,17 @@ public class Chart: UIView {
     CATransaction.commit()
   }
 
+  /**
+   Empties the `dataSource` and reloadsData() to clear all segments. Animates changes by default.
+   */
+  public func empty(animated animated: Bool = true) {
+    guard var source = dataSource else {
+        return
+    }
+    source.empty()
+    reloadData(animated: animated)
+  }
+
   public func animateSegments(color: UIColor?, startAngle: CGFloat?, endAngle: CGFloat?, completion: () -> () = {}) {
     CATransaction.begin()
     CATransaction.setCompletionBlock({
