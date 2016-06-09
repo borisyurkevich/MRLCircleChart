@@ -186,12 +186,14 @@ class SegmentLayer: CALayer {
    */
   func animationForAngle(key: String) -> CAAction {
     
-    var fromValue: AnyObject
+    var fromValue: AnyObject = 2 * CGFloat(M_PI)
     
     if let value = presentationLayer()?.valueForKey(key) {
       fromValue = value
     } else {
-      fromValue = CGFloat(M_PI) * 2
+      if let value = valueForKey(key) {
+        fromValue = value
+      }
     }
     
     return animation(key, toValue:nil, fromValue:fromValue)
