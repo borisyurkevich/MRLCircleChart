@@ -176,8 +176,11 @@ public class Chart: UIView {
 
   /**
    Querries the `dataSource` for data and inserts, removes, or updates all relevant segments.
+
+   - parameter animated: specifies whether the operation will be animated, defaults to `true`
+   - parameter completion: optional completion block, defaults to `{}`
    */
-  final public func reloadData() {
+  final public func reloadData(animated animated: Bool = true, completion: () -> () = {}) {
     guard let source = dataSource else {
       return
     }
@@ -187,10 +190,16 @@ public class Chart: UIView {
 
     let refNumber = max(source.numberOfItems(), chartSegmentLayers.count)
 
+    var indexesToRemove: [Int] = []
+    
+    CATransaction.begin()
+    CATransaction.setCompletionBlock(completion)
+    CATransaction.setDisableActions(!animated)
+    
     for index in 0..<refNumber {
+        
       guard let _ = source.item(index) else {
-        let targetAngle = source.maxValue > source.totalValue() ? source.startAngle(index) : CGFloat(M_PI * 2)
-        remove(index, startAngle: targetAngle, endAngle: targetAngle)
+        indexesToRemove.append(index)
         continue
       }
 
@@ -206,13 +215,15 @@ public class Chart: UIView {
         chartContainer.layer.addSublayer(layer)
         chartSegmentLayers.append(layer)
 
-        if initialAnimationComplete {
-          layer.animateInsertion(
+        if animated {
+          if initialAnimationComplete {
+            layer.animateInsertion(
             source.isFullCircle() ? CGFloat(M_PI * 2) : source.startAngle(index),
             endAngle: initialAnimationComplete ? nil : CGFloat(M_PI * 2)
-          )
-        } else {
-          layer.animateInsertion(0, endAngle: source.isFullCircle() ? 0 : CGFloat(M_PI * 2))
+            )
+          } else {
+            layer.animateInsertion(0, endAngle: source.isFullCircle() ? 0 : CGFloat(M_PI * 2))
+          }
         }
 
         continue
@@ -225,8 +236,25 @@ public class Chart: UIView {
       layer.padding = padding
     }
 
+    for index in indexesToRemove.reverse() {
+      let targetAngle = source.maxValue > source.totalValue() ? source.startAngle(index) : CGFloat(M_PI * 2)
+      remove(index, startAngle: targetAngle, endAngle: targetAngle, animated: animated)
+    }
+    
     initialAnimationComplete = true
     reassignSegmentLayerscapTypes()
+    CATransaction.commit()
+  }
+
+  /**
+   Empties the `dataSource` and reloadsData() to clear all segments. Animates changes by default.
+   */
+  public func empty(animated animated: Bool = true) {
+    guard var source = dataSource else {
+        return
+    }
+    source.empty()
+    reloadData(animated: animated)
   }
 
   public func animateSegments(color: UIColor?, startAngle: CGFloat?, endAngle: CGFloat?, completion: () -> () = {}) {
@@ -262,36 +290,53 @@ public class Chart: UIView {
    - parameter duration: duration of the animation
    - parameter completion:  completion, run when segment is removed
    */
+  @available(iOS, deprecated=0.2.0, obsoleted=0.3.0, message="The `fromPercent` parameter does not fit nicely into a radian-based environment. Use a substitue with `fromAngle` instead")
   public func animateDepletion(color: UIColor, fromPercent: CGFloat = 100, duration: Double = 1.0, completion: () -> () = {}) {
-
-    let fromAngle = fromPercent/100 * CGFloat(M_PI * 2)
-
+    animateDepletion(color, fromAngle: fromPercent * 2 * CGFloat(M_PI) / 100, duration: duration, completion: completion)
+  }
+  
+  /**
+   A utility function to perform a one-shot animation of a single segment
+   that does not need to be based on `dataSource` values.
+   You can use it to convey states such as depletion through animation without
+   relying on faux `dataSource`.
+   
+   **Note**: this will remove all segments from your chart but one, you can rely on
+   the `completion` closure to reload your data
+   
+   - parameter color:       `UIColor` used for the segment
+   - parameter fromAngle:   a radian value, representing starting angle
+   - parameter duration:    duration of the animation
+   - parameter completion:  completion, run when segment is removed
+   */
+  public func animateDepletion(color: UIColor, fromAngle: CGFloat = CGFloat(M_PI), duration: Double = 1.0, completion: () -> () = {}) {
+    
+    CATransaction.begin()
+    CATransaction.setCompletionBlock { 
+      let segment = SegmentLayer(frame: self.chartContainer.bounds, start: 0, end: fromAngle, lineWidth: self.lineWidth, padding: self.padding, color: color.CGColor)
+      segment.capType = .BothEnds
+      self.chartContainer.layer.addSublayer(segment)
+      
+      segment.animateRemoval(startAngle: 0, endAngle: 0) {
+        completion()
+      }
+    }
+    
     for segment in chartSegmentLayers {
-      segment.animationDuration = 0.25
-      segment.color = color.CGColor
-      segment.endAngle = fromAngle
-
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+      CATransaction.begin()
+      CATransaction.setAnimationDuration(0.25)
+      CATransaction.setCompletionBlock({ 
         segment.removeFromSuperlayer()
         if let index = self.chartSegmentLayers.indexOf(segment) {
           self.chartSegmentLayers.removeAtIndex(index)
         }
       })
+      segment.color = color.CGColor
+      segment.endAngle = fromAngle
+      CATransaction.commit()
     }
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
-      let segment = SegmentLayer(frame: self.chartContainer.bounds, start: 0, end: fromAngle, lineWidth: self.lineWidth, padding: self.padding, color: color.CGColor)
-      segment.capType = .BothEnds
-      segment.animationDuration = duration
-
-      self.chartContainer.layer.addSublayer(segment)
-      self.chartSegmentLayers.append(segment)
-
-      segment.animateRemoval(startAngle: 0, endAngle: 0) {
-        self.chartSegmentLayers.removeLast()
-        completion()
-      }
-    })
+    
+    CATransaction.commit()
   }
 
   //MARK: - Layer manipulation
@@ -311,7 +356,7 @@ public class Chart: UIView {
         switch index {
         case 0 where chartSegmentLayers.count > 1:
           segment.capType = .Begin
-        case 0 where chartSegmentLayers.count == 0:
+        case 0 where chartSegmentLayers.count == 1:
           segment.capType = .BothEnds
         case chartSegmentLayers.count - 1 where chartSegmentLayers.count > 1:
           segment.capType = .End

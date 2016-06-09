@@ -85,7 +85,22 @@ extension DataSource {
   public mutating func append(item: Segment) {
     chartSegments.append(item)
   }
+  
+  /**
+   Empties dataSource's chart segments.
+   */
+  public mutating func empty() {
+    while chartSegments.count > 0 {
+      remove(0)
+    }
+  }
 
+  //MARK: - Public Angle Helpers
+  
+  public func endAngle() -> CGFloat {
+    return endAngle(numberOfItems() - 1)
+  }
+  
   //MARK: - Angle Helpers
 
   func startAngle(index: Int) -> CGFloat {

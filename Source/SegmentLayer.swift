@@ -151,6 +151,10 @@ class SegmentLayer: CALayer {
   */
   override func actionForKey(event: String) -> CAAction? {
 
+    if superlayer == nil {
+        return nil
+    }
+    
     let shouldSkipAnimationOnEntry = superlayer == nil
       && (PropertyKeys.lineWidthKey == event || PropertyKeys.paddingKey == event)
 
@@ -186,12 +190,14 @@ class SegmentLayer: CALayer {
    */
   func animationForAngle(key: String) -> CAAction {
     
-    var fromValue: AnyObject
+    var fromValue: AnyObject = 2 * CGFloat(M_PI)
     
     if let value = presentationLayer()?.valueForKey(key) {
       fromValue = value
     } else {
-      fromValue = CGFloat(M_PI) * 2
+      if let value = valueForKey(key) {
+        fromValue = value
+      }
     }
     
     return animation(key, toValue:nil, fromValue:fromValue)
@@ -235,11 +241,15 @@ class SegmentLayer: CALayer {
    * Animates the insertion of the layer, given an initial `startAngle` and,
    * optionally, an initial `endAngle` (defaults to startAngle).
    */
-  func animateInsertion(startAngle: CGFloat, endAngle: CGFloat? = nil) {
+  func animateInsertion(startAngle: CGFloat, endAngle: CGFloat? = nil, animated: Bool = true) {
     let initialEndAngle = endAngle == nil ? startAngle : endAngle!
 
+    CATransaction.begin()
+    CATransaction.setAnimationDuration(animated ? animationDuration : 0)
     self.addAnimation(animation(PropertyKeys.startAngleKey, toValue: self.startAngle, fromValue: startAngle), forKey: PropertyKeys.startAngleKey)
     self.addAnimation(animation(PropertyKeys.endAngleKey, toValue: self.endAngle, fromValue: initialEndAngle), forKey: PropertyKeys.endAngleKey)
+    
+    CATransaction.commit()
   }
 
   override class func needsDisplayForKey(key: String) -> Bool {
