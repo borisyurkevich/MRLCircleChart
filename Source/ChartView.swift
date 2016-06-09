@@ -265,36 +265,53 @@ public class Chart: UIView {
    - parameter duration: duration of the animation
    - parameter completion:  completion, run when segment is removed
    */
+  @available(iOS, deprecated=0.2.0, obsoleted=0.3.0, message="The `fromPercent` parameter does not fit nicely into a radian-based environment. Use a substitue with `fromAngle` instead")
   public func animateDepletion(color: UIColor, fromPercent: CGFloat = 100, duration: Double = 1.0, completion: () -> () = {}) {
-
-    let fromAngle = fromPercent/100 * CGFloat(M_PI * 2)
-
+    animateDepletion(color, fromAngle: fromPercent * 2 * CGFloat(M_PI) / 100, duration: duration, completion: completion)
+  }
+  
+  /**
+   A utility function to perform a one-shot animation of a single segment
+   that does not need to be based on `dataSource` values.
+   You can use it to convey states such as depletion through animation without
+   relying on faux `dataSource`.
+   
+   **Note**: this will remove all segments from your chart but one, you can rely on
+   the `completion` closure to reload your data
+   
+   - parameter color:       `UIColor` used for the segment
+   - parameter fromAngle:   a radian value, representing starting angle
+   - parameter duration:    duration of the animation
+   - parameter completion:  completion, run when segment is removed
+   */
+  public func animateDepletion(color: UIColor, fromAngle: CGFloat = CGFloat(M_PI), duration: Double = 1.0, completion: () -> () = {}) {
+    
+    CATransaction.begin()
+    CATransaction.setCompletionBlock { 
+      let segment = SegmentLayer(frame: self.chartContainer.bounds, start: 0, end: fromAngle, lineWidth: self.lineWidth, padding: self.padding, color: color.CGColor)
+      segment.capType = .BothEnds
+      self.chartContainer.layer.addSublayer(segment)
+      
+      segment.animateRemoval(startAngle: 0, endAngle: 0) {
+        completion()
+      }
+    }
+    
     for segment in chartSegmentLayers {
-      segment.animationDuration = 0.25
-      segment.color = color.CGColor
-      segment.endAngle = fromAngle
-
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
+      CATransaction.begin()
+      CATransaction.setAnimationDuration(0.25)
+      CATransaction.setCompletionBlock({ 
         segment.removeFromSuperlayer()
         if let index = self.chartSegmentLayers.indexOf(segment) {
           self.chartSegmentLayers.removeAtIndex(index)
         }
       })
+      segment.color = color.CGColor
+      segment.endAngle = fromAngle
+      CATransaction.commit()
     }
-
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.25 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), {
-      let segment = SegmentLayer(frame: self.chartContainer.bounds, start: 0, end: fromAngle, lineWidth: self.lineWidth, padding: self.padding, color: color.CGColor)
-      segment.capType = .BothEnds
-      segment.animationDuration = duration
-
-      self.chartContainer.layer.addSublayer(segment)
-      self.chartSegmentLayers.append(segment)
-
-      segment.animateRemoval(startAngle: 0, endAngle: 0) {
-        self.chartSegmentLayers.removeLast()
-        completion()
-      }
-    })
+    
+    CATransaction.commit()
   }
 
   //MARK: - Layer manipulation
