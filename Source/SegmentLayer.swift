@@ -151,6 +151,10 @@ class SegmentLayer: CALayer {
   */
   override func actionForKey(event: String) -> CAAction? {
 
+    if superlayer == nil {
+        return nil
+    }
+    
     let shouldSkipAnimationOnEntry = superlayer == nil
       && (PropertyKeys.lineWidthKey == event || PropertyKeys.paddingKey == event)
 
@@ -186,12 +190,14 @@ class SegmentLayer: CALayer {
    */
   func animationForAngle(key: String) -> CAAction {
     
-    var fromValue: AnyObject
+    var fromValue: AnyObject = 2 * CGFloat(M_PI)
     
     if let value = presentationLayer()?.valueForKey(key) {
       fromValue = value
     } else {
-      fromValue = CGFloat(M_PI) * 2
+      if let value = valueForKey(key) {
+        fromValue = value
+      }
     }
     
     return animation(key, toValue:nil, fromValue:fromValue)
