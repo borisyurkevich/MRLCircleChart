@@ -86,6 +86,12 @@ extension DataSource {
     chartSegments.append(item)
   }
 
+  //MARK: - Public Angle Helpers
+  
+  public func endAngle() -> CGFloat {
+    return endAngle(numberOfItems() - 1)
+  }
+  
   //MARK: - Angle Helpers
 
   func startAngle(index: Int) -> CGFloat {
