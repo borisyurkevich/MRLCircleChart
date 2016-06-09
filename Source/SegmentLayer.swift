@@ -151,6 +151,10 @@ class SegmentLayer: CALayer {
   */
   override func actionForKey(event: String) -> CAAction? {
 
+    if superlayer == nil {
+        return nil
+    }
+    
     let shouldSkipAnimationOnEntry = superlayer == nil
       && (PropertyKeys.lineWidthKey == event || PropertyKeys.paddingKey == event)
 
