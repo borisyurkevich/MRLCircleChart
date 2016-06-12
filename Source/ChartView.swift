@@ -237,10 +237,21 @@ public class Chart: UIView {
     }
 
     for index in indexesToRemove.reverse() {
-      let targetAngle = source.maxValue > source.totalValue() ? source.startAngle(index) : CGFloat(M_PI * 2)
-      remove(index, startAngle: targetAngle, endAngle: targetAngle, animated: animated)
-    }
+      guard let layer = layer(index) else {
+        continue
+      }
+        
+      CATransaction.begin()
+      CATransaction.setCompletionBlock({ 
+        layer.removeFromSuperlayer()
+      })
+      layer.startAngle = 0
+      layer.endAngle = 0
     
+      chartSegmentLayers.removeAtIndex(index)
+      CATransaction.commit()
+    }
+
     initialAnimationComplete = true
     reassignSegmentLayerscapTypes()
     CATransaction.commit()
@@ -397,13 +408,9 @@ public class Chart: UIView {
 
     if animated {
       layer.animateRemoval(startAngle: startAngle, endAngle: endAngle, completion: {
-        if self.chartSegmentLayers.count > index {
-          self.chartSegmentLayers.removeAtIndex(index)
-          self.reassignSegmentLayerscapTypes()
-        }
+        self.reassignSegmentLayerscapTypes()
       })
     } else {
-      chartSegmentLayers.removeAtIndex(index)
       layer.removeFromSuperlayer()
       reassignSegmentLayerscapTypes()
     }
