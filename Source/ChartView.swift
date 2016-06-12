@@ -410,14 +410,52 @@ public class Chart: UIView {
   }
 
   //MARK: - Touches
-
-  override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    guard let touch = touches.first,
-          let source = dataSource else {
-      return
+    
+    public func select(index selectIndex: Int) {
+        
+        if chartSegmentLayers.count == 0 {
+            return
+        }
+        
+        if let del = delegate {
+            del.chartDidSelectItem(selectIndex)
+        }
+        
+        if let _ = layer(selectIndex) {
+            switch selectionStyle {
+            case .None:
+                break
+            case .Grow:
+                for (index, layer) in chartSegmentLayers.enumerate() {
+                    layer.selected = index == selectIndex ? !layer.selected : false
+                    layer.lineWidth = index == selectIndex ? lineWidth + 20 : lineWidth
+                    layer.padding = index == selectIndex ? padding - 20 : padding
+                }
+            case .DesaturateNonSelected:
+                
+                var selecting = false
+                
+                for (index, layer) in chartSegmentLayers.enumerate() {
+                    if index == selectIndex && !layer.selected {
+                        selecting = true
+                    }
+                }
+                
+                for (index, layer) in chartSegmentLayers.enumerate() {
+                    if index == selectIndex {
+                        layer.selected = !layer.selected
+                        layer.color = colorPalette[index].CGColor
+                    } else {
+                        layer.selected = false
+                        layer.color = selecting ? grayscalePalette[index].CGColor : colorPalette[index].CGColor
+                    }
+                }
+            }
+        }
     }
-
-    guard source.numberOfItems() > 0 else {
+    
+  override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    guard let touch = touches.first else {
       return
     }
 
@@ -425,45 +463,8 @@ public class Chart: UIView {
 
     for (index, layer) in chartSegmentLayers.enumerate() {
       if layer.containsPoint(point) {
-        guard let del = delegate else {
-          break
-        }
-        del.chartDidSelectItem(index)
+        select(index: index)
       }
-    }
-
-    switch selectionStyle {
-    case .None:
-      break
-    case .Grow:
-      for layer in chartSegmentLayers {
-        layer.selected = layer.containsPoint(point) ? !layer.selected : false
-        layer.lineWidth = layer.selected ? lineWidth + 20 : lineWidth
-        layer.padding = layer.selected ? padding - 20 : padding
-      }
-      break
-    case .DesaturateNonSelected:
-      var select = false
-
-      for layer in chartSegmentLayers {
-        layer.selected = layer.containsPoint(point) ? !layer.selected : false
-      }
-
-      for layer in chartSegmentLayers {
-        if layer.selected {
-          select = layer.selected
-          break
-        }
-      }
-
-      for (index, layer) in chartSegmentLayers.enumerate() {
-        if select {
-          layer.color = layer.containsPoint(point) ? colorPalette[index].CGColor : grayscalePalette[index].CGColor
-        } else {
-          layer.color = colorPalette[index].CGColor
-        }
-      }
-      break
     }
   }
 }
