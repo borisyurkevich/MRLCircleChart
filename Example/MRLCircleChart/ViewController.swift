@@ -53,16 +53,21 @@ class ViewController: UIViewController {
     
     if let tempChart = chart {
       tempChart.dataSource = dataSource
-      tempChart.selectionStyle = .DesaturateNonSelected
+      tempChart.selectionStyle = .Grow
       tempChart.delegate = self
-      
+      tempChart.reloadData()
+
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
         // let's pretend our async API call has finished
-        tempChart.reloadData()
+        tempChart.select(index: 2)
       }
 
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-        tempChart.animateDepletion(UIColor.redColor(), fromAngle: self.dataSource.endAngle())
+        tempChart.select(index: 2)
+      }
+      
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(5 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+//        tempChart.select(index: 3)
       }
     }
   }
