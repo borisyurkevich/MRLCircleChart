@@ -438,8 +438,8 @@ public class Chart: UIView {
             case .Grow:
                 for (index, layer) in chartSegmentLayers.enumerate() {
                     layer.selected = index == selectIndex ? !layer.selected : false
-                    layer.lineWidth = index == selectIndex ? lineWidth + 20 : lineWidth
-                    layer.padding = index == selectIndex ? padding - 20 : padding
+                    layer.lineWidth = layer.selected ? lineWidth + 20 : lineWidth
+                    layer.padding = layer.selected ? padding - 20 : padding
                 }
             case .DesaturateNonSelected:
                 
