@@ -28,6 +28,16 @@ extension CGRect {
   func center() -> CGPoint {
     return CGPoint(x: size.width / 2, y: size.height / 2)
   }
+    
+    func largestSquareThatFits() -> CGRect {
+        let squareSide = min(size.width, size.height)
+        let vertical = size.height > size.width
+        let origin = CGPoint(
+            x: vertical ? 0 : (size.width - squareSide) / 2,
+            y: !vertical ? 0 : (size.height - squareSide) / 2
+        )
+        return CGRect(origin: origin, size: CGSize(width: squareSide, height: squareSide))
+    }
 }
 
 struct HSBComponents {

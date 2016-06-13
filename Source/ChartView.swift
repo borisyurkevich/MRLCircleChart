@@ -24,15 +24,6 @@
 
 import UIKit
 
-/*
- * Provides keys for easy access to Chart properties
- */
-private enum ChartProperties {
-  static let dataSourceKey = "dataSource"
-  static let maxAngleKey = "maxAngle"
-  static let lineWidthKey = "lineWidth"
-}
-
 /**
  Chart is a `UIView` subclass that provides a graphical representation
  of it's data source in the form of a pie chart. It manages an array of
@@ -71,7 +62,6 @@ public class Chart: UIView {
   
   //MARK: - Private variables
 
-  private let chartContainer = UIView()
   private var chartBackgroundSegment: SegmentLayer?
   private var chartSegmentLayers: [SegmentLayer] = []
   private var colorPalette: [UIColor] = []
@@ -117,44 +107,34 @@ public class Chart: UIView {
 
   override public func layoutSubviews() {
     super.layoutSubviews()
-    self.setupChartContainerIfNeeded()
+    updateSegmentsBounds()
+    setupBackgroundSegmentIfNeeded()
   }
 
   //MARK: - Setup
 
-  /**
-   Calculates the view that will hold individual `SegmentLayers` as well as
-   the square frame for that view, in such a way that it fills the most of the
-   available frame.
-
-   This is also used to resize the container appropriately with bounds changes,
-   as well as for the intial configuration of `outerRadiusRatio` and `innerRadiusRatio`.
-   */
-  private func setupChartContainerIfNeeded() {
-
-    let squareSide = min(frame.size.width, frame.size.height)
-    let squaredBounds = CGRect(origin: CGPointZero, size: CGSize(width: squareSide, height: squareSide))
-
-    if chartContainer.superview == nil {
-      chartContainer.transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
-      addSubview(chartContainer)
+    /**
+     Updates individual layer positoins according to bounds changes
+     */
+    private func updateSegmentsBounds() {
+        for layer in chartSegmentLayers {
+            layer.frame = bounds.largestSquareThatFits()
+            layer.transform = CATransform3DMakeRotation(CGFloat(-M_PI / 2), 0, 0, 1)
+        }
     }
-
-    chartContainer.bounds = squaredBounds
-    chartContainer.center = bounds.center()
     
-    if let backgroundSegment = chartBackgroundSegment {
-      backgroundSegment.frame = chartContainer.bounds
-    } else {
-      chartBackgroundSegment = SegmentLayer(frame: chartContainer.bounds, start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.CGColor)
-      chartContainer.layer.insertSublayer(chartBackgroundSegment!, atIndex:0)
+    /**
+     Sets up background segment if needed
+     */
+    private func setupBackgroundSegmentIfNeeded() {
+        if let backgroundSegment = chartBackgroundSegment {
+            backgroundSegment.frame = bounds.largestSquareThatFits()
+        } else {
+            let backgroundSegment = SegmentLayer(frame: bounds.largestSquareThatFits(), start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.CGColor)
+            layer.insertSublayer(backgroundSegment, atIndex: 0)
+            chartBackgroundSegment = backgroundSegment
+        }
     }
-
-    for layer in chartSegmentLayers {
-      layer.frame = chartContainer.bounds
-      layer.position = chartContainer.bounds.center()
-    }
-  }
 
   /**
    Setups `colorPalette` based on `beginColor` and `endColor`. Also setups
@@ -197,7 +177,6 @@ public class Chart: UIView {
     }
 
     setupColorPalettes()
-    setupChartContainerIfNeeded()
 
     let refNumber = max(source.numberOfItems(), chartSegmentLayers.count)
 
@@ -216,14 +195,14 @@ public class Chart: UIView {
 
       guard let layer = layer(index) else {
         let layer = SegmentLayer(
-          frame: chartContainer.bounds,
+          frame: self.bounds.largestSquareThatFits(),
           start: source.startAngle(index),
           end: source.endAngle(index),
           lineWidth: lineWidth,
           padding: padding,
           color: colorPalette[index].CGColor
         )
-        chartContainer.layer.addSublayer(layer)
+        self.layer.insertSublayer(layer, atIndex: 1)
         chartSegmentLayers.append(layer)
 
         if animated {
@@ -256,6 +235,7 @@ public class Chart: UIView {
       CATransaction.setCompletionBlock({ 
         layer.removeFromSuperlayer()
       })
+
       layer.startAngle = 0
       layer.endAngle = 0
     
@@ -335,9 +315,9 @@ public class Chart: UIView {
     
     CATransaction.begin()
     CATransaction.setCompletionBlock { 
-      let segment = SegmentLayer(frame: self.chartContainer.bounds, start: 0, end: fromAngle, lineWidth: self.lineWidth, padding: self.padding, color: color.CGColor)
+      let segment = SegmentLayer(frame: self.bounds.largestSquareThatFits(), start: 0, end: fromAngle, lineWidth: self.lineWidth, padding: self.padding, color: color.CGColor)
       segment.capType = .BothEnds
-      self.chartContainer.layer.addSublayer(segment)
+      self.layer.addSublayer(segment)
       
       segment.animateRemoval(startAngle: 0, endAngle: 0) {
         completion()
@@ -483,11 +463,12 @@ public class Chart: UIView {
   }
     
   override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-    guard let touch = touches.first else {
+    guard let touch = touches.first,
+        let firstLayer = chartSegmentLayers.first else {
       return
     }
     
-    let point = self.convertPoint(touch.locationInView(self), toCoordinateSpace: chartContainer)
+    let point = firstLayer.convertPoint(touch.locationInView(self), fromLayer: self.layer)
 
     for (index, layer) in chartSegmentLayers.enumerate() {
       if layer.containsPoint(point) {
