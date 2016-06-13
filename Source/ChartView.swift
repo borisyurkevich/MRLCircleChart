@@ -416,16 +416,19 @@ public class Chart: UIView {
     }
   }
 
-  //MARK: - Touches
+    //MARK: - Touches
     
+    /**
+     Utility function enabling manual segment selection from your code. 
+
+     *Note:* this will not run `chartDidSelectItem(_:)` on your `delegate`
+
+     - parameter selectIndex: index to select
+     */
     public func select(index selectIndex: Int) {
         
         if chartSegmentLayers.count == 0 {
             return
-        }
-        
-        if let del = delegate {
-            del.chartDidSelectItem(selectIndex)
         }
         
         if let _ = layer(selectIndex) {
@@ -470,6 +473,10 @@ public class Chart: UIView {
 
     for (index, layer) in chartSegmentLayers.enumerate() {
       if layer.containsPoint(point) {
+        if !layer.selected {
+          guard let del = delegate else { break }
+          del.chartDidSelectItem(index)
+        }
         select(index: index)
       }
     }
