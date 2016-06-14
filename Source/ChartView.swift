@@ -438,9 +438,26 @@ public class Chart: UIView {
             case .Grow:
                 for (index, layer) in chartSegmentLayers.enumerate() {
                     layer.selected = index == selectIndex ? !layer.selected : false
-                    layer.lineWidth = layer.selected ? lineWidth + 20 : lineWidth
-                    layer.padding = layer.selected ? padding - 20 : padding
+                    layer.lineWidth = layer.selected ? lineWidth + 10 : lineWidth
+                    layer.padding = layer.selected ? padding - 10 : padding
                 }
+            }
+        }
+    }
+    
+    func deselect(index: Int) {
+        if chartSegmentLayers.count == 0 {
+            return
+        }
+        
+        if let layer = layer(index) {
+            switch selectionStyle {
+            case .None:
+                break
+            case .Grow:
+                layer.selected = false
+                layer.lineWidth = lineWidth
+                layer.padding = padding
             }
         }
     }
@@ -454,7 +471,11 @@ public class Chart: UIView {
 
     for (index, layer) in chartSegmentLayers.enumerate() {
       if layer.containsPoint(point) {
+        guard let del = delegate else { break }
+        del.chartDidSelectItem(index)
         select(index: index)
+      } else {
+        deselect(index)
       }
     }
   }
