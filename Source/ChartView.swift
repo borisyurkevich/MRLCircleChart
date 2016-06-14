@@ -454,10 +454,6 @@ public class Chart: UIView {
 
     for (index, layer) in chartSegmentLayers.enumerate() {
       if layer.containsPoint(point) {
-        if !layer.selected {
-          guard let del = delegate else { break }
-          del.chartDidSelectItem(index)
-        }
         select(index: index)
       }
     }
