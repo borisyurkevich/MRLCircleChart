@@ -46,7 +46,7 @@ public class Chart: UIView {
 
   public var dataSource: DataSource?
   public var delegate: Delegate?
-  public var selectionStyle: SegmentSelectionStyle = .DesaturateNonSelected
+  public var selectionStyle: SegmentSelectionStyle = .Grow
 
   //MARK: - Public Inspectables
 
@@ -440,25 +440,6 @@ public class Chart: UIView {
                     layer.selected = index == selectIndex ? !layer.selected : false
                     layer.lineWidth = layer.selected ? lineWidth + 20 : lineWidth
                     layer.padding = layer.selected ? padding - 20 : padding
-                }
-            case .DesaturateNonSelected:
-                
-                var selecting = false
-                
-                for (index, layer) in chartSegmentLayers.enumerate() {
-                    if index == selectIndex && !layer.selected {
-                        selecting = true
-                    }
-                }
-                
-                for (index, layer) in chartSegmentLayers.enumerate() {
-                    if index == selectIndex {
-                        layer.selected = !layer.selected
-                        layer.color = colorPalette[index].CGColor
-                    } else {
-                        layer.selected = false
-                        layer.color = selecting ? grayscalePalette[index].CGColor : colorPalette[index].CGColor
-                    }
                 }
             }
         }
