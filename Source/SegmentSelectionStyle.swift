@@ -38,8 +38,4 @@ public enum SegmentSelectionStyle {
    *  On selection, the selected layer will grow in radius
    */
   case Grow
-  /**
-   *  On selection, all but the selected layer will be desaturated.
-   */
-  case DesaturateNonSelected
 }
