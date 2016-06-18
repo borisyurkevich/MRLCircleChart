@@ -155,7 +155,7 @@ extension CGPoint {
 
    - returns: CGPoint calculated by averaging given points.
    */
-  public static func midPoint(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+  static func midPoint(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
     return CGPoint(
       x: round((lhs.x + rhs.x) / 2),
       y: round((lhs.y + rhs.y) / 2)
