@@ -160,12 +160,6 @@ public class Chart: UIView {
   }
   
   /**
-   A flag used to distinguish the entry animation (adding elements, clockwise)
-   from animation used for individual elements (adding elements, counterclockwise).
-   */
-  private var initialAnimationComplete = false
-  
-  /**
    Querries the `dataSource` for data and inserts, removes, or updates all relevant segments.
    
    - parameter animated: specifies whether the operation will be animated, defaults to `true`
@@ -206,14 +200,10 @@ public class Chart: UIView {
         chartSegmentLayers.append(layer)
         
         if animated {
-          if initialAnimationComplete {
-            layer.animateInsertion(
-              source.isFullCircle() ? CGFloat(M_PI * 2) : source.startAngle(index),
-              endAngle: initialAnimationComplete ? nil : CGFloat(M_PI * 2)
-            )
-          } else {
-            layer.animateInsertion(0, endAngle: source.isFullCircle() ? 0 : CGFloat(M_PI * 2))
-          }
+          layer.animateInsertion(
+            source.isFullCircle() ? CGFloat(M_PI * 2) : source.startAngle(index),
+            endAngle: source.isFullCircle() ? nil : CGFloat(M_PI * 2)
+          )
         }
         
         continue
@@ -243,7 +233,6 @@ public class Chart: UIView {
       CATransaction.commit()
     }
     
-    initialAnimationComplete = true
     reassignSegmentLayerscapTypes()
     CATransaction.commit()
   }
