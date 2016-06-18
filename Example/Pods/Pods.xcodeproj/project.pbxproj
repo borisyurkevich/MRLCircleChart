@@ -13,7 +13,6 @@
 		270D113E2C38D86D4BA583B273A709DA /* SegmentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 720D54CD7E0215D75F4AB3B84ED004C9 /* SegmentLayer.swift */; };
 		3F5A536254E449ADA39C03ADF851BF8B /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655C59599207AEDDEC278FD3FAB328F2 /* Extensions.swift */; };
 		5AD14072ECCA5A6807E3136862AA0F65 /* Pods-MRLCircleChart_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CC51F2B1EBEA704ED7DB1D0B5C1D9C40 /* Pods-MRLCircleChart_Tests-dummy.m */; };
-		609CEA670A92AD65232B490A04E2734E /* ChartDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3AE1990B5B44D95365DB15C7FAC8A7F /* ChartDelegate.swift */; };
 		6A3498B7963E5924D3FA8A5EBC707DE7 /* ChartDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 649545717A81F47679D5EF13F5DF0F0A /* ChartDataSource.swift */; };
 		73B3345DB463204362D63C669C3B9617 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CEC22C73C1608DFA5D5D78BDCB218219 /* Foundation.framework */; };
 		8416B2F20301EF4422727A5F1FC16353 /* Pods-MRLCircleChart_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E6312817BC841586BEC97E14CF2287F1 /* Pods-MRLCircleChart_Example-dummy.m */; };
@@ -68,7 +67,6 @@
 		9E2C391154F0C858E552809D33308F05 /* Pods-MRLCircleChart_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-MRLCircleChart_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		B0D2F33828C85A2D8EFAD4F23330DA6D /* Pods-MRLCircleChart_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-MRLCircleChart_Tests-umbrella.h"; sourceTree = "<group>"; };
 		BE575BF5DA455697AC5DAC32EF354B71 /* MRLCircleChart-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MRLCircleChart-umbrella.h"; sourceTree = "<group>"; };
-		C3AE1990B5B44D95365DB15C7FAC8A7F /* ChartDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = ChartDelegate.swift; sourceTree = "<group>"; };
 		C7728CEA23A846F6DB16A540B64DCB29 /* Pods-MRLCircleChart_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-MRLCircleChart_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C99B763A9FE68F16B3BD9233FC5EF18F /* MRLCircleChart.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = MRLCircleChart.modulemap; sourceTree = "<group>"; };
 		CAD91AC555801C2A7F8E5E03139F5A4A /* Pods-MRLCircleChart_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-MRLCircleChart_Example-resources.sh"; sourceTree = "<group>"; };
@@ -151,7 +149,6 @@
 			isa = PBXGroup;
 			children = (
 				649545717A81F47679D5EF13F5DF0F0A /* ChartDataSource.swift */,
-				C3AE1990B5B44D95365DB15C7FAC8A7F /* ChartDelegate.swift */,
 				2AA3C6D17527A4B313D4DC3448B1F75D /* ChartView.swift */,
 				655C59599207AEDDEC278FD3FAB328F2 /* Extensions.swift */,
 				2D766BBB49DD6B0786EA47BA99BB70D6 /* Segment.swift */,
@@ -372,7 +369,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6A3498B7963E5924D3FA8A5EBC707DE7 /* ChartDataSource.swift in Sources */,
-				609CEA670A92AD65232B490A04E2734E /* ChartDelegate.swift in Sources */,
 				0D4ECE35CE9C467161D84E3D7BF9459B /* ChartView.swift in Sources */,
 				3F5A536254E449ADA39C03ADF851BF8B /* Extensions.swift in Sources */,
 				0D7D5EA49F61607465609C41BB43BEFB /* MRLCircleChart-dummy.m in Sources */,

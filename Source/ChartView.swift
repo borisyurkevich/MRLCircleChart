@@ -42,10 +42,21 @@ private enum ChartProperties {
 @objc
 public class Chart: UIView {
 
+  //MARK: - Public Handlers
+
+  /**
+   Ran when user selects a layer via touch interaction.
+   */
+  public var selectHandler: (Int) -> () = {index in }
+  
+  /**
+   Ran when a segment is deselected as a result of direct touch interaction 
+   */
+  public var deselectHandler: (Int) -> () = {index in }
+
   //MARK: - Public variables
 
   public var dataSource: DataSource?
-  public var delegate: Delegate?
   public var selectionStyle: SegmentSelectionStyle = .Grow
 
   //MARK: - Public Inspectables
@@ -421,7 +432,7 @@ public class Chart: UIView {
     /**
      Utility function enabling manual segment selection from your code. 
 
-     *Note:* this will not run `chartDidSelectItem(_:)` on your `delegate`
+     *Note:* this will not run any of the selection handlers
 
      - parameter selectIndex: index to select
      */
@@ -461,24 +472,41 @@ public class Chart: UIView {
             }
         }
     }
+
+  private func selected() -> Int? {
+    for (index, layer) in chartSegmentLayers.enumerate() {
+      if layer.selected {
+        return index
+      }
+    }
+    return nil
+  }
     
   override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
     guard let touch = touches.first else {
       return
     }
-
+    
     let point = self.convertPoint(touch.locationInView(self), toCoordinateSpace: chartContainer)
 
     for (index, layer) in chartSegmentLayers.enumerate() {
       if layer.containsPoint(point) {
-        guard let del = delegate else { break }
-        del.chartDidSelectItem(index)
+        if layer.selected {
+          deselectHandler(index)
+        } else {
+          selectHandler(index)
+        }
         select(index: index)
+        return
       } else {
-        deselect(index)
+        if layer.selected {
+          deselectHandler(index)
+          deselect(index)
+        }
       }
     }
   }
+
 }
 
 private extension UIColor {
