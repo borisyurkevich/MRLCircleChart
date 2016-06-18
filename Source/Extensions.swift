@@ -28,16 +28,16 @@ extension CGRect {
   func center() -> CGPoint {
     return CGPoint(x: size.width / 2, y: size.height / 2)
   }
-    
-    func largestSquareThatFits() -> CGRect {
-        let squareSide = min(size.width, size.height)
-        let vertical = size.height > size.width
-        let origin = CGPoint(
-            x: vertical ? 0 : (size.width - squareSide) / 2,
-            y: !vertical ? 0 : (size.height - squareSide) / 2
-        )
-        return CGRect(origin: origin, size: CGSize(width: squareSide, height: squareSide))
-    }
+  
+  func largestSquareThatFits() -> CGRect {
+    let squareSide = min(size.width, size.height)
+    let vertical = size.height > size.width
+    let origin = CGPoint(
+      x: vertical ? 0 : (size.width - squareSide) / 2,
+      y: !vertical ? 0 : (size.height - squareSide) / 2
+    )
+    return CGRect(origin: origin, size: CGSize(width: squareSide, height: squareSide))
+  }
 }
 
 struct HSBComponents {
@@ -51,52 +51,52 @@ extension UIColor {
   /**
    Calculates a range of colours between `beginColour` and `endColour` with
    number of steps equal to `count` and steps distributed evenly.
-
+   
    - parameter beginColor: first colour in the returned `Array`
    - parameter endColor:   final colour in the returned `Array`
    - parameter count:      number of colours in the returned `Array`
-
+   
    - returns: `[UIColor]` with number of items equal to `count`, containing a
    'gradient' of colour values between `beginColor` and `endColor`
    */
   class func colorRange(beginColor beginColor: UIColor, endColor: UIColor, count: Int) -> [UIColor] {
-
+    
     var br: CGFloat = 0
     var bg: CGFloat = 0
     var bb: CGFloat = 0
     var ba: CGFloat = 0
-
+    
     beginColor.getRed(&br, green: &bg, blue: &bb, alpha: &ba)
-
+    
     var er: CGFloat = 0
     var eg: CGFloat = 0
     var eb: CGFloat = 0
     var ea: CGFloat = 0
-
+    
     endColor.getRed(&er, green: &eg, blue: &eb, alpha: &ea)
-
+    
     var result: [UIColor] = []
-
+    
     for index in 0..<count {
       let red = br - (br - er) / CGFloat(count) * CGFloat(index)
       let green = bg - (bg - eg) / CGFloat(count) * CGFloat(index)
       let blue = bb - (bb - eb) / CGFloat(count) * CGFloat(index)
       let alpha = ba - (ba - ea) / CGFloat(count) * CGFloat(index)
-
+      
       let color = UIColor(red:red, green:green, blue:blue, alpha:alpha)
-
+      
       result.append(color)
     }
-
+    
     return result
   }
-
+  
   func desaturated() -> UIColor {
     var components = self.getHSBComponents()
     components.s = 0
     return UIColor.fromHSBComponents(components)
   }
-
+  
   func getHSBComponents() -> HSBComponents {
     var components = HSBComponents(h: 0, s: 0, b: 0, a: 0)
     self.getHue(
@@ -107,7 +107,7 @@ extension UIColor {
     )
     return components
   }
-
+  
   static func fromHSBComponents(components: HSBComponents) -> UIColor {
     return UIColor(
       hue: components.h,
@@ -135,7 +135,7 @@ extension NSCoder {
    Decodes and returns a `CGColorRef` whose four color components were
    previously encoded under keys derived from the given `key` such as red
    component was encoded under `"\(key)_red"` key and so on.
-
+   
    - returns: CGColorRef recontructed for a given `key`
    */
   func decodeCGColorRefForKey(key: NSString) -> CGColorRef {
@@ -143,7 +143,7 @@ extension NSCoder {
     let green = CGFloat(self.decodeFloatForKey("\(key)_green"))
     let blue = CGFloat(self.decodeFloatForKey("\(key)_blue"))
     let alpha = CGFloat(self.decodeFloatForKey("\(key)_alpha"))
-
+    
     return UIColor(red: red, green: green, blue: blue, alpha: alpha).CGColor
   }
 }
@@ -152,7 +152,7 @@ extension CGPoint {
   /**
    Calculates a midpoint located between the two given points, `lhs` and `rhs`. Sequence of
    arguments given is unimportant.
-
+   
    - returns: CGPoint calculated by averaging given points.
    */
   static func midPoint(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
