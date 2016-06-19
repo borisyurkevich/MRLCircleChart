@@ -350,7 +350,15 @@ public class Chart: UIView {
     }
   }
   
-  func deselect(index: Int) {
+  
+  /**
+   Utility function enabling segment deselection from your code.
+   
+   *Note:* this will not run any of the selection handlers
+   
+   - parameter se
+   */
+  public func deselect(index index: Int) {
     if chartSegmentLayers.count == 0 {
       return
     }
@@ -388,15 +396,16 @@ public class Chart: UIView {
       if layer.containsPoint(point) {
         if layer.selected {
           deselectHandler(index)
+          deselect(index: index)
         } else {
           selectHandler(index)
+          select(index: index)
         }
-        select(index: index)
         return
       } else {
         if layer.selected {
           deselectHandler(index)
-          deselect(index)
+          deselect(index: index)
         }
       }
     }
