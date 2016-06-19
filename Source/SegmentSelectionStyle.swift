@@ -24,10 +24,9 @@
 
 /**
  Provides an enumeration of available selection styles for chart segment layers.
-
+ 
  - None:  no change on selection
  - Grow:  increases outer radius of the selected segment
- - DesaturateNonSelected: desatures all layers aside from the one selected
  */
 public enum SegmentSelectionStyle {
   /**

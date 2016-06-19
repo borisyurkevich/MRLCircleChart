@@ -41,7 +41,7 @@ class SegmentLayer: CALayer {
     static let capType = "capType"
     static let boundsKey = "bounds"
     static let paddingKey = "padding"
-
+    
     static let animatableProperties = [
       colorKey, startAngleKey, endAngleKey, lineWidthKey, paddingKey
     ]
@@ -56,24 +56,24 @@ class SegmentLayer: CALayer {
   struct Constants {
     static let animationDuration = 0.75
   }
-
+  
   var selected = false
-
+  
   @NSManaged var startAngle: CGFloat
   @NSManaged var endAngle: CGFloat
   @NSManaged var lineWidth: CGFloat
   @NSManaged var color: CGColorRef
   @NSManaged var padding: CGFloat
-
+  
   var animationDuration: Double = Constants.animationDuration
-
+  
   @objc
   enum SegmentCapType: Int {
     case None, Begin, End, BothEnds
   }
-
+  
   @NSManaged var capType: SegmentCapType
-
+  
   
   //MARK: - Computed Properties
   
@@ -92,40 +92,40 @@ class SegmentLayer: CALayer {
   /**
    Default initialized for `SegmentLayer`, provides all necessary customization
    points.
-
+   
    - parameter frame:       frame in which to draw the segment. Note that this
    frame should be identical for all chart segments.
    - parameter start:       angle at which to begin drawing
    - parameter end:         angle at which to stop drawing
    - parameter lineWidth:   chart's width
    - parameter color:       `CGColorRef` color of the segment
-
+   
    - returns: a fully configured `SegmentLayer` instance
    */
-
+  
   required init(frame: CGRect, start: CGFloat, end: CGFloat, lineWidth: CGFloat, padding: CGFloat = 0, color: CGColorRef) {
     super.init()
-
+    
     self.frame = frame
     self.startAngle = start
     self.endAngle = end
     self.lineWidth = lineWidth
     self.color = color
     self.padding = padding
-
+    
     self.commonInit()
   }
-
+  
   override init(layer: AnyObject) {
     super.init(layer: layer)
     self.commonInit()
   }
-
+  
   required init?(coder aDecoder: NSCoder) {
     super.init(coder: aDecoder)
     self.commonInit()
   }
-
+  
   /**
    Common initialization point, to be used for any operation that are common
    to all initializers and can be performed after `self` is available.
@@ -133,45 +133,45 @@ class SegmentLayer: CALayer {
   private func commonInit() {
     contentsScale = UIScreen.mainScreen().scale
   }
-
+  
   override func encodeWithCoder(aCoder: NSCoder) {
     super.encodeWithCoder(aCoder)
   }
-
+  
   //MARK: - Animation Overrides
   /**
    Overrides `CALayer`'s `actionForKey(_:)` method to specify animation
    behaviour for custom properties.
    Currently returns an animation action only for keys defined in
    `PropertyKeys.animatableProperties` `Array`.
-
+   
    - parameter event: String corresponding to the property key
-
+   
    - returns: a custom animation for specified properties
-  */
+   */
   override func actionForKey(event: String) -> CAAction? {
-
+    
     if superlayer == nil {
-        return nil
+      return nil
     }
     
     let shouldSkipAnimationOnEntry = superlayer == nil
       && (PropertyKeys.lineWidthKey == event || PropertyKeys.paddingKey == event)
-
+    
     if event == PropertyKeys.colorKey {
       return animationForColor()
     }
-
+    
     outer: if PropertyKeys.animatableProperties.contains(event) {
       if shouldSkipAnimationOnEntry {
-          break outer
+        break outer
       }
       return animationForAngle(event)
     }
-
+    
     return super.actionForKey(event)
   }
-
+  
   /**
    Helper function to generate similar `CAAnimations` easily
    */
@@ -181,10 +181,10 @@ class SegmentLayer: CALayer {
     animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
     animation.toValue = toValue
     animation.fromValue = fromValue
-
+    
     return animation
   }
-
+  
   /**
    Provides an animation tailored for the start- and endAngle properties.
    */
@@ -202,7 +202,7 @@ class SegmentLayer: CALayer {
     
     return animation(key, toValue:nil, fromValue:fromValue)
   }
-
+  
   /**
    Provides an animation tailored for the color property.
    */
@@ -218,7 +218,7 @@ class SegmentLayer: CALayer {
     
     return animation(PropertyKeys.colorKey, toValue:nil, fromValue: fromValue)
   }
-
+  
   /**
    * Animates the removal of the layer from it's `superlayer`. It will run
    * `removeFromSuperlayer` when the animation completes, and provides a
@@ -230,20 +230,20 @@ class SegmentLayer: CALayer {
       self.removeFromSuperlayer()
       completion()
     })
-
+    
     self.startAngle = exitingStartAngle
     self.endAngle = exitingEndAngle
-
+    
     CATransaction.commit()
   }
-
+  
   /**
    * Animates the insertion of the layer, given an initial `startAngle` and,
    * optionally, an initial `endAngle` (defaults to startAngle).
    */
   func animateInsertion(startAngle: CGFloat, endAngle: CGFloat? = nil, animated: Bool = true) {
     let initialEndAngle = endAngle == nil ? startAngle : endAngle!
-
+    
     CATransaction.begin()
     CATransaction.setAnimationDuration(animated ? animationDuration : 0)
     self.addAnimation(animation(PropertyKeys.startAngleKey, toValue: self.startAngle, fromValue: startAngle), forKey: PropertyKeys.startAngleKey)
@@ -251,23 +251,23 @@ class SegmentLayer: CALayer {
     
     CATransaction.commit()
   }
-
+  
   override class func needsDisplayForKey(key: String) -> Bool {
     if PropertyKeys.needsDisplayProperties.contains(key) {
       return true
     }
     return super.needsDisplayForKey(key)
   }
-
+  
   //MARK: - Drawing
-
+  
   override func drawInContext(ctx: CGContext) {
     drawBaseSegment(ctx)
     drawCaps(ctx)
   }
-
+  
   //MARK: - Hit Testing
-
+  
   override func containsPoint(point: CGPoint) -> Bool {
     return ([.BothEnds, .Begin].contains(capType) && pathContainsPoint(capPath(startAngle, start: true), point: point))
       || ([.BothEnds, .End].contains(capType) && pathContainsPoint(capPath(endAngle, start: false), point: point))
@@ -282,35 +282,35 @@ extension SegmentLayer {
   private func drawBaseSegment(ctx: CGContext) {
     drawPath(ctx, path: baseSegmentPath())
   }
-
+  
   private func drawCaps(ctx: CGContext) {
     if [.BothEnds, .Begin].contains(capType) {
       drawCap(ctx, angle: startAngle, start: true)
     }
-
+    
     if [.BothEnds, .End].contains(capType) {
       drawCap(ctx, angle: endAngle, start: false)
     }
   }
-
+  
   private func drawPath(ctx: CGContext, path: CGPath) {
     CGContextBeginPath(ctx)
     CGContextAddPath(ctx, path)
     CGContextSetFillColorWithColor(ctx, color)
     CGContextDrawPath(ctx, .Fill)
   }
-
+  
   private func pointOnCircle(center: CGPoint, radius: CGFloat, angle: CGFloat) -> CGPoint {
     return CGPoint(
       x: center.x + radius * cos(angle),
       y: center.y + radius * sin(angle)
     )
   }
-
+  
   private func drawCap(ctx: CGContext, angle: CGFloat, start: Bool) {
     drawPath(ctx, path: capPath(angle, start: start))
   }
-
+  
   /**
    Provides path for either begin or end cap
    
@@ -332,25 +332,25 @@ extension SegmentLayer {
       endAngle: capEndAngle,
       clockwise: start
     )
-
+    
     return path.CGPath
   }
-
+  
   /**
    Provides a `CGPathRef` that is used for drawing the segment layer as well as for
    hit testing. Radii and angle properties together with layer's bounds are used
    to calculate the path.
    */
   private func baseSegmentPath() -> CGPathRef {
-
+    
     let center = bounds.center()
-
+    
     let innerStartPoint = pointOnCircle(center, radius: innerRadius, angle: startAngle)
     let outerStartPoint = pointOnCircle(center, radius: outerRadius, angle: startAngle)
     let innerEndPoint = pointOnCircle(center, radius: innerRadius, angle: endAngle)
-
+    
     let path = UIBezierPath()
-
+    
     path.moveToPoint(innerStartPoint)
     path.addLineToPoint(outerStartPoint)
     path.addArcWithCenter(
@@ -360,7 +360,7 @@ extension SegmentLayer {
       endAngle: self.endAngle,
       clockwise: true
     )
-
+    
     path.addLineToPoint(innerEndPoint)
     path.addArcWithCenter(
       center,
@@ -369,10 +369,10 @@ extension SegmentLayer {
       endAngle: startAngle,
       clockwise: false
     )
-
+    
     return path.CGPath
   }
-
+  
   /**
    Checks that a given CGPathRef contains a given CGPoint.
    
