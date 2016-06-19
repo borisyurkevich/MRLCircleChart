@@ -240,94 +240,19 @@ public class Chart: UIView {
   /**
    Empties the `dataSource` and reloadsData() to clear all segments. Animates changes by default.
    */
-  public func empty(animated animated: Bool = true) {
+  public func empty(animated animated: Bool = true, color: UIColor? = nil) {
     guard var source = dataSource else {
       return
     }
+    
+    if let layerColor = color {
+      for layer in chartSegmentLayers {
+        layer.color = layerColor.CGColor
+      }
+    }
+    
     source.empty()
     reloadData(animated: animated)
-  }
-  
-  public func animateSegments(color: UIColor?, startAngle: CGFloat?, endAngle: CGFloat?, completion: () -> () = {}) {
-    CATransaction.begin()
-    CATransaction.setCompletionBlock({
-      completion()
-    })
-    for segment in chartSegmentLayers {
-      if let segmentColor = color {
-        segment.color = segmentColor.CGColor
-      }
-      if let segmentStartAngle = startAngle {
-        segment.startAngle = segmentStartAngle
-      }
-      if let segmentEndAngle = endAngle {
-        segment.endAngle = segmentEndAngle
-      }
-    }
-    CATransaction.commit()
-  }
-  
-  /**
-   A utility function to perform a one-shot animation of a single segment
-   that does not need to be based on `dataSource` values.
-   You can use it to convey states such as depletion through animation without
-   relying on faux `dataSource`.
-   
-   **Note**: this will remove all segments from your chart but one, you can rely on
-   the `completion` closure to reload your data
-   
-   - parameter color:       `UIColor` used for the segment
-   - parameter fromPercent: value between 1-100, representing starting angle
-   - parameter duration: duration of the animation
-   - parameter completion:  completion, run when segment is removed
-   */
-  @available(iOS, deprecated=0.2.0, obsoleted=0.3.0, message="The `fromPercent` parameter does not fit nicely into a radian-based environment. Use a substitue with `fromAngle` instead")
-  public func animateDepletion(color: UIColor, fromPercent: CGFloat = 100, duration: Double = 1.0, completion: () -> () = {}) {
-    animateDepletion(color, fromAngle: fromPercent * 2 * CGFloat(M_PI) / 100, duration: duration, completion: completion)
-  }
-  
-  /**
-   A utility function to perform a one-shot animation of a single segment
-   that does not need to be based on `dataSource` values.
-   You can use it to convey states such as depletion through animation without
-   relying on faux `dataSource`.
-   
-   **Note**: this will remove all segments from your chart but one, you can rely on
-   the `completion` closure to reload your data
-   
-   - parameter color:       `UIColor` used for the segment
-   - parameter fromAngle:   a radian value, representing starting angle
-   - parameter duration:    duration of the animation
-   - parameter completion:  completion, run when segment is removed
-   */
-  public func animateDepletion(color: UIColor, fromAngle: CGFloat = CGFloat(M_PI), duration: Double = 1.0, completion: () -> () = {}) {
-    
-    CATransaction.begin()
-    CATransaction.setCompletionBlock {
-      let segment = SegmentLayer(frame: self.bounds.largestSquareThatFits(), start: 0, end: fromAngle, lineWidth: self.lineWidth, padding: self.padding, color: color.CGColor)
-      segment.capType = .BothEnds
-      self.layer.addSublayer(segment)
-      
-      segment.animateRemoval(startAngle: 0, endAngle: 0) {
-        completion()
-      }
-    }
-    
-    for segment in chartSegmentLayers {
-      CATransaction.begin()
-      CATransaction.setAnimationDuration(0.25)
-      CATransaction.setCompletionBlock({
-        segment.removeFromSuperlayer()
-        if let index = self.chartSegmentLayers.indexOf(segment) {
-          self.chartSegmentLayers.removeAtIndex(index)
-        }
-      })
-      segment.color = color.CGColor
-      segment.endAngle = fromAngle
-      CATransaction.commit()
-    }
-    
-    CATransaction.commit()
   }
   
   //MARK: - Layer manipulation
