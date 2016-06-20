@@ -132,6 +132,7 @@ class SegmentLayer: CALayer {
    */
   private func commonInit() {
     contentsScale = UIScreen.mainScreen().scale
+    layer.transform = CATransform3DMakeRotation(CGFloat(-M_PI / 2), 0, 0, 1)
   }
   
   override func encodeWithCoder(aCoder: NSCoder) {

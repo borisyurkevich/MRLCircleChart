@@ -119,7 +119,6 @@ public class Chart: UIView {
   private func updateSegmentsBounds() {
     for layer in chartSegmentLayers {
       layer.frame = bounds.largestSquareThatFits()
-      layer.transform = CATransform3DMakeRotation(CGFloat(-M_PI / 2), 0, 0, 1)
     }
   }
   
