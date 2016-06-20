@@ -54,20 +54,22 @@ class ViewController: UIViewController {
     if let tempChart = chart {
       tempChart.dataSource = dataSource
       tempChart.selectionStyle = .Grow
-      tempChart.delegate = self
-      tempChart.reloadData()
-
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-        // let's pretend our async API call has finished
-        tempChart.select(index: 2)
-      }
-
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(3 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-        tempChart.select(index: 2)
-      }
+      tempChart.selectHandler = { index in print("selected \(index)") }
+      tempChart.deselectHandler = { index in print("deselected \(index)") }
       
-      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(5 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-//        tempChart.select(index: 3)
+      func runAfter(time: Double, block: () -> ()) {
+        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC)))
+        dispatch_after(delay, dispatch_get_main_queue(), { 
+          block()
+        })
+      }
+        
+      runAfter(1) {
+        tempChart.reloadData()
+      }
+
+      runAfter(2) {
+        tempChart.select(index: 1)
       }
     }
   }
@@ -108,11 +110,5 @@ class ViewController: UIViewController {
       dataSource.remove(dataSource.numberOfItems() - 1)
       chart!.reloadData()
     }
-  }
-}
-
-extension ViewController: MRLCircleChart.Delegate {
-  func chartDidSelectItem(index: Int) {
-    print("selected item with index: \(index)")
   }
 }
