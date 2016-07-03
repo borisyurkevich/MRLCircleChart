@@ -200,8 +200,8 @@ public class Chart: UIView {
         
         if animated {
           layer.animateInsertion(
-            source.isFullCircle() ? CGFloat(M_PI * 2) : source.startAngle(index),
-            endAngle: source.isFullCircle() ? nil : CGFloat(M_PI * 2)
+            source.isFullCircle() ? 0 : source.startAngle(index),
+            endAngle: source.isFullCircle() ? 0 : CGFloat(M_PI * 2)
           )
         }
         
