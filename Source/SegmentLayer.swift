@@ -209,12 +209,10 @@ class SegmentLayer: CALayer {
    */
   func animationForColor() -> CAAction {
     
-    var fromValue: AnyObject
+    var fromValue: AnyObject = self.color
     
     if let value = presentationLayer()?.valueForKey(PropertyKeys.colorKey) {
       fromValue = value
-    } else {
-      fromValue = self.color
     }
     
     return animation(PropertyKeys.colorKey, toValue:nil, fromValue: fromValue)
