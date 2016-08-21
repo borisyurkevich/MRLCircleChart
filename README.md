@@ -6,6 +6,8 @@
 [![Platform](https://img.shields.io/cocoapods/p/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
 
+![Animated .gif of chart reloading it's data](/Screenshots/mrlcirclechart.gif?raw=true "Reloading chart data")
+
 ## Demo
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first, or run `pod try MRLCircleChart` to check it with a temporary clone.
