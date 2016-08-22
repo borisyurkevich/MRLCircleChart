@@ -1,14 +1,15 @@
 # MRLCircleChart
 
 [![CI Status](http://img.shields.io/travis/mlisik/MRLCircleChart.svg?style=flat)](https://travis-ci.org/mlisik/MRLCircleChart)
-[![Version](https://img.shields.io/cocoapods/v/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
-[![License](https://img.shields.io/cocoapods/l/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 [![Platform](https://img.shields.io/cocoapods/p/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
+[![Version](https://img.shields.io/cocoapods/v/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
+[![Stories in Progress](https://badge.waffle.io/waffleio/waffle.io.svg?label=waffle%3Ain%20progress&title=In%20Progress)](http://waffle.io/waffleio/waffle.io)
+[![License](https://img.shields.io/cocoapods/l/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 
 ![Animated .gif of chart reloading it's data](/Screenshots/mrlcirclechart.gif?raw=true "Reloading chart data")
 
-MRLCircleChart is a small pie/circle chart UI component written in Swift. Aims to take care of most of the work for you (just pass in a data source and configure the view) at the expense of customizability.
+`MRLCircleChart` is a small pie/circle chart UI component written in Swift. Aims to take care of most of the work for you (just pass in a data source and configure the view) at the expense of customizability.
 
 ## Main Features
 
@@ -25,15 +26,15 @@ MRLCircleChart is a small pie/circle chart UI component written in Swift. Aims t
 
 ````swift
 struct DataSource: MRLCircleChart.DataSource {
-// protocol conformance
+  // protocol conformance
 }
 
 let segments = [90, 80, 60].map {
-Segment(value: $0, description: "\($0)")
+  Segment(value: $0, description: "\($0)")
 }
 
-let dataSource = DataSource(items: segments, maxValue: 250)
-chart.dataSource = dataSource
+chart.dataSource = DataSource(items: segments, maxValue: 250)
+
 ````
 
 ### Customization
@@ -70,8 +71,8 @@ public mutating func empty()
 #### Chart
 
 ````swift
-final public func reloadData(animated animated: Bool = default, completion: () -> () = default)
-public func empty(animated animated: Bool = default, color: UIColor? = default)
+final public func reloadData(animated animated: Bool = true, completion: () -> () = {})
+public func empty(animated animated: Bool = true, color: UIColor? = nil)
 public func select(index selectIndex: Int)
 public func deselect(index index: Int)
 ````
@@ -81,12 +82,12 @@ public func deselect(index index: Int)
 Two callbacks are available for user interaction events: when a segment is selected and when it's deselected.
 
 ````swift
-chart.selectHandler = { 
-index in print("selected \(index)") 
+chart.selectHandler = {
+  index in print("selected \(index)")
 }
 
-chart.deselectHandler = { 
-index in print("deselected \(index)") 
+chart.deselectHandler = {
+  index in print("deselected \(index)")
 }
 ````
 
@@ -102,6 +103,9 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod "MRLCircleChart"
 ```
+## Collaboration
+
+If you'd like to help out, check open tickets on [waffle.io](https://waffle.io/mlisik/MRLCircleChart). There's no roadmap for the project yet, but pull requests are welcome (whether you want to clean up, fix or add something), and so are feature requests.
 
 ## Author
 
