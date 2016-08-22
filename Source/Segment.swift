@@ -31,7 +31,7 @@ import Foundation
  Note: this class and it's subclasses are `Comparable` by their's `value`
  property, and `Equatable` on both `value` and `description properties.
  */
-public class Segment: NSObject, Comparable {
+public struct Segment: Comparable {
   
   /**
    Value that the instance represents
@@ -52,7 +52,7 @@ public class Segment: NSObject, Comparable {
    
    - returns: `Segment` instance
    */
-  required public init(value: Double, description: String) {
+  public init(value: Double, description: String) {
     self.value = value
     self.valueDescription = description
   }
