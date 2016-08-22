@@ -78,11 +78,20 @@
                         <color key="backgroundColor" red="0.22576877474784851" green="0.27809423208236694" blue="0.30738925933837891" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="k30-R4-Ve4" secondAttribute="bottom" constant="30" id="E4N-FB-yPK"/>
-                            <constraint firstItem="mDV-Ut-tyj" firstAttribute="leading" secondItem="Stw-8A-c3g" secondAttribute="leadingMargin" id="NFt-6h-1Zo"/>
+                            <constraint firstItem="mDV-Ut-tyj" firstAttribute="leading" secondItem="Stw-8A-c3g" secondAttribute="leadingMargin" id="NFt-6h-1Zo">
+                                <variation key="heightClass=regular-widthClass=regular" constant="140"/>
+                            </constraint>
                             <constraint firstItem="k30-R4-Ve4" firstAttribute="top" secondItem="mDV-Ut-tyj" secondAttribute="bottom" constant="8" id="RYo-tz-Fen"/>
-                            <constraint firstItem="k30-R4-Ve4" firstAttribute="leading" secondItem="Stw-8A-c3g" secondAttribute="leadingMargin" constant="24" id="hkg-hT-G4o"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="k30-R4-Ve4" secondAttribute="trailing" constant="24" id="k4f-wF-3fA"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="mDV-Ut-tyj" secondAttribute="trailing" id="oo7-AB-ZfY"/>
+                            <constraint firstItem="k30-R4-Ve4" firstAttribute="leading" secondItem="Stw-8A-c3g" secondAttribute="leadingMargin" constant="24" id="hkg-hT-G4o">
+                                <variation key="heightClass=regular-widthClass=regular" constant="164"/>
+                            </constraint>
+                            <constraint firstAttribute="trailingMargin" secondItem="k30-R4-Ve4" secondAttribute="trailing" constant="24" id="k4f-wF-3fA">
+                                <variation key="heightClass=regular-widthClass=regular" constant="164"/>
+                            </constraint>
+                            <constraint firstItem="mDV-Ut-tyj" firstAttribute="centerX" secondItem="Stw-8A-c3g" secondAttribute="centerX" id="oWt-lw-WbV"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="mDV-Ut-tyj" secondAttribute="trailing" id="oo7-AB-ZfY">
+                                <variation key="heightClass=regular-widthClass=regular" constant="140"/>
+                            </constraint>
                             <constraint firstItem="mDV-Ut-tyj" firstAttribute="top" secondItem="jyV-Pf-zRb" secondAttribute="bottom" constant="8" id="yJc-j7-Zbb"/>
                         </constraints>
                     </view>
