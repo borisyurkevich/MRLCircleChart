@@ -8,8 +8,8 @@
 
 Pod::Spec.new do |s|
   s.name    = 'MRLCircleChart'
-  s.version = '0.3.5'
-  s.summary = 'Small and very opinionated pie-chart view written in Swift. '
+  s.version = '0.4.0'
+  s.summary = 'Small, far from perfect, and very opinionated pie-chart view written in Swift. '
 
   s.description = <<-DESC
   MRLCircleChart is a small pie/circle chart UI component written in Swift. Aims to take care of most of the work for you (just pass in a data source and configure the view) at the expense of customizability. It's a work in progress written for a secret project.

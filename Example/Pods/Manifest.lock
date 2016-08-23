@@ -1,5 +1,5 @@
 PODS:
-  - MRLCircleChart (0.3.5)
+  - MRLCircleChart (0.4.0)
 
 DEPENDENCIES:
   - MRLCircleChart (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  MRLCircleChart: 5cba6c79e1f91ec6b472a413bad1fee57ccd7d17
+  MRLCircleChart: 719b44a83a4a5ccc5e56c4094d8e244dd5affc7e
 
 PODFILE CHECKSUM: 88b335fdd064d64e15803ec977cff16c2cd8def1
 

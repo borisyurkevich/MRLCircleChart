@@ -42,36 +42,31 @@ class DataSource: MRLCircleChart.DataSource {
 
 class ViewController: UIViewController {
   
-  @IBOutlet var chart: MRLCircleChart.Chart?
+  //MARK: - IBOutlets
+  
+  @IBOutlet var chart: MRLCircleChart.Chart!
+  
+  //MARK: - Instance Variables
   
   var dataSource = DataSource(items: [], maxValue: Data.maxValue)
+  
+  //MARK: - Lifecycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
     setupData()
+    setupChart()
     
-    if let tempChart = chart {
-      tempChart.dataSource = dataSource
-      tempChart.selectionStyle = .Grow
-      tempChart.selectHandler = { index in print("selected \(index)") }
-      tempChart.deselectHandler = { index in print("deselected \(index)") }
-      
-      func runAfter(time: Double, block: () -> ()) {
-        let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC)))
-        dispatch_after(delay, dispatch_get_main_queue(), { 
-          block()
-        })
-      }
-        
-      runAfter(1) {
-        tempChart.reloadData()
-      }
-
-      runAfter(2) {
-        tempChart.select(index: 1)
-      }
-    }
+    runDemo()
+  }
+  
+  //MARK: - Setup
+  
+  private func setupChart() {
+    chart.dataSource = dataSource
+    chart.selectHandler = { index in print("selected \(index)") }
+    chart.deselectHandler = { index in print("deselected \(index)") }
   }
   
   private func setupData() {
@@ -80,35 +75,56 @@ class ViewController: UIViewController {
     }.sort { $0 < $1 }
   }
   
+  //MARK: - DemoActions
+  
+  private func runDemo() {
+    func runAfter(time: Double, block: () -> ()) {
+      let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC)))
+      dispatch_after(delay, dispatch_get_main_queue(), {
+        block()
+      })
+    }
+    
+    runAfter(1) {
+      self.chart.reloadData()
+    }
+    
+    runAfter(2) {
+      self.chart.select(index: 1)
+    }
+  }
+  
   //MARK: - Actions
   
-  @IBAction func beginColorChanged(sender: UIButton) {
-    sender.selected = !sender.selected
-    
-    chart!.beginColor! = sender.selected ? UIColor.greenColor() : UIColor.yellowColor()
-  }
-  
-  @IBAction func endColorChanged(sender: UIButton) {
-    sender.selected = !sender.selected
-    chart!.endColor! = sender.selected ? UIColor.redColor() : UIColor.blueColor()
-  }
-  
-  @IBAction func reverseValues(sender: UIButton) {
+  @IBAction func reverseButtonTapped(sender: UIButton) {
     dataSource.chartSegments = dataSource.chartSegments.reverse()
-    chart!.reloadData()
+    chart.reloadData()
   }
   
-  @IBAction func addItem(sender: UIButton) {
+  @IBAction func addButtonTapped(sender: UIButton) {
+    
+    sender.enabled = false
+    
     let value: Double = Double(random() % 75  + 25)
     dataSource.append(Segment(value: value, description: "value: \(value)"))
-    dataSource.chartSegments.sortInPlace { $0 < $1 }
-    chart!.reloadData()
+    
+    chart.reloadData() {
+      sender.enabled = true
+    }
   }
   
-  @IBAction func removeItem(sender: UIButton) {
-    if dataSource.numberOfItems() > 0 {
-      dataSource.remove(dataSource.numberOfItems() - 1)
-      chart!.reloadData()
+  @IBAction func removeButtonTapped(sender: UIButton) {
+    
+    guard dataSource.numberOfItems() > 0 else {
+      return
     }
+    
+    sender.enabled = false
+    
+    dataSource.remove(dataSource.numberOfItems() - 1)
+    chart.reloadData() {
+      sender.enabled = true
+    }
+  
   }
 }
