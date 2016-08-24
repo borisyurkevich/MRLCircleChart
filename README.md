@@ -7,7 +7,7 @@
 [![Stories in Progress](https://badge.waffle.io/waffleio/waffle.io.svg?label=waffle%3Ain%20progress&title=In%20Progress)](http://waffle.io/waffleio/waffle.io)
 [![License](https://img.shields.io/cocoapods/l/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 
-![Animated .gif of chart reloading it's data](/Screenshots/mrlcirclechart.gif?raw=true "Reloading chart data")
+![Animated .gif of chart reloading it's data](https://raw.githubusercontent.com/mlisik/MRLCircleChart/master/Screenshots/mrlcirclechart.gif?raw=true "Reloading chart data")
 
 `MRLCircleChart` is a small pie/circle chart UI component written in Swift. Aims to take care of most of the work for you (just pass in a data source and configure the view) at the expense of customizability.
 
@@ -41,7 +41,7 @@ chart.dataSource = DataSource(items: segments, maxValue: 250)
 
 All customization you need can be done via InterfaceBuilder, through the following `IBDesignable` properties:
 
-![InterfaceBuilder's AttributesInspector pane contains a Chart section where primary properties are easily accessible](/Screenshots/mrlcirclechart_ib_properties.png?raw=true "Editing Chart properties through InterfaceBuilder")
+![InterfaceBuilder's AttributesInspector pane contains a Chart section where primary properties are easily accessible](https://raw.githubusercontent.com/mlisik/MRLCircleChart/master/Screenshots/mrlcirclechart_ib_properties.png?raw=true "Editing Chart properties through InterfaceBuilder")
 
 If you are laying out your `Chart` without IB, these are also readily available.
 
