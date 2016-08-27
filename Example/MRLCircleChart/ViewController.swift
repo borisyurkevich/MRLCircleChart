@@ -30,16 +30,6 @@ struct Data {
   static let values: [Double] = [10, 20, 40, 30, 10, 80, 90, 100, 200, 250, 80, 90]
 }
 
-class DataSource: MRLCircleChart.DataSource {
-  var chartSegments: [MRLCircleChart.Segment]
-  var maxValue: Double
-  
-  init(items: [MRLCircleChart.Segment], maxValue: Double) {
-    self.chartSegments = items
-    self.maxValue = maxValue
-  }
-}
-
 class ViewController: UIViewController {
   
   //MARK: - IBOutlets
@@ -48,7 +38,7 @@ class ViewController: UIViewController {
   
   //MARK: - Instance Variables
   
-  var dataSource = DataSource(items: [], maxValue: Data.maxValue)
+  var dataSource = MRLCircleChart.NumberChartDataSource<Double>(items: [], maxValue: Data.maxValue)
   
   //MARK: - Lifecycle
   
@@ -70,8 +60,8 @@ class ViewController: UIViewController {
   }
   
   private func setupData() {
-    dataSource.chartSegments = Data.values.map { (value: Double) -> MRLCircleChart.Segment in
-      return MRLCircleChart.Segment(value: value, description: "value: \(value)")
+    dataSource.segments = Data.values.map { (value: Double) -> MRLCircleChart.ChartSegment in
+      return MRLCircleChart.ChartSegment(value: value, description: "value: \(value)")
     }.sort { $0 < $1 }
   }
   
@@ -97,7 +87,7 @@ class ViewController: UIViewController {
   //MARK: - Actions
   
   @IBAction func reverseButtonTapped(sender: UIButton) {
-    dataSource.chartSegments = dataSource.chartSegments.reverse()
+    dataSource.segments = dataSource.segments.reverse()
     chart.reloadData()
   }
   
@@ -106,7 +96,7 @@ class ViewController: UIViewController {
     sender.enabled = false
     
     let value: Double = Double(random() % 75  + 25)
-    dataSource.append(Segment(value: value, description: "value: \(value)"))
+    dataSource.append(ChartSegment(value: value, description: "value: \(value)"))
     
     chart.reloadData() {
       sender.enabled = true
