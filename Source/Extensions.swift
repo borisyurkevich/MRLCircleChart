@@ -59,7 +59,7 @@ extension UIColor {
    - returns: `[UIColor]` with number of items equal to `count`, containing a
    'gradient' of colour values between `beginColor` and `endColor`
    */
-  class func colorRange(beginColor beginColor: UIColor, endColor: UIColor, count: Int) -> [UIColor] {
+  final class func colorRange(beginColor beginColor: UIColor, endColor: UIColor, count: Int) -> [UIColor] {
     
     var br: CGFloat = 0
     var bg: CGFloat = 0
@@ -77,7 +77,7 @@ extension UIColor {
     
     var result: [UIColor] = []
     
-    for index in 0..<count {
+    for index in 1..<count + 1 {
       let red = br - (br - er) / CGFloat(count) * CGFloat(index)
       let green = bg - (bg - eg) / CGFloat(count) * CGFloat(index)
       let blue = bb - (bb - eb) / CGFloat(count) * CGFloat(index)

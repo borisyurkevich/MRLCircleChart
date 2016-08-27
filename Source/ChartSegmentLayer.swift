@@ -1,5 +1,5 @@
 //
-//  SegmentLayer.swift
+//  ChartSegmentLayer.swift
 //  MRLCircleChart
 //
 //  Created by Marek Lisik on 27/03/16.
@@ -27,7 +27,7 @@ import UIKit
  `CALayer` subclass used by the chart view to draw the individual segments of
  it's pie chart. This class is only used internally.
  */
-class SegmentLayer: CALayer {
+class ChartSegmentLayer: CALayer {
   /**
    Defines the keys for encodeable properties of the layer. Also, exposes
    `animatableProperties`, an array of keys for properties that require custom
@@ -51,7 +51,7 @@ class SegmentLayer: CALayer {
     ]
   }
   /**
-   Constants used by `SegmentLayer`
+   Constants used by `ChartSegmentLayer`
    */
   struct Constants {
     static let animationDuration = 0.75
@@ -68,12 +68,11 @@ class SegmentLayer: CALayer {
   var animationDuration: Double = Constants.animationDuration
   
   @objc
-  enum SegmentCapType: Int {
+  enum ChartSegmentCapType: Int {
     case None, Begin, End, BothEnds
   }
   
-  @NSManaged var capType: SegmentCapType
-  
+  @NSManaged var capType: ChartSegmentCapType
   
   //MARK: - Computed Properties
   
@@ -90,7 +89,7 @@ class SegmentLayer: CALayer {
   }
   
   /**
-   Default initialized for `SegmentLayer`, provides all necessary customization
+   Default initialized for `ChartSegmentLayer`, provides all necessary customization
    points.
    
    - parameter frame:       frame in which to draw the segment. Note that this
@@ -100,7 +99,7 @@ class SegmentLayer: CALayer {
    - parameter lineWidth:   chart's width
    - parameter color:       `CGColorRef` color of the segment
    
-   - returns: a fully configured `SegmentLayer` instance
+   - returns: a fully configured `ChartSegmentLayer` instance
    */
   
   required init(frame: CGRect, start: CGFloat, end: CGFloat, lineWidth: CGFloat, padding: CGFloat = 0, color: CGColorRef) {
@@ -275,9 +274,9 @@ class SegmentLayer: CALayer {
 }
 
 /**
- Provides SegmentLayer with path-calculations
+ Provides ChartSegmentLayer with path-calculations
  */
-extension SegmentLayer {
+extension ChartSegmentLayer {
   private func drawBaseSegment(ctx: CGContext) {
     drawPath(ctx, path: baseSegmentPath())
   }

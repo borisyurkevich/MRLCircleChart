@@ -47,25 +47,30 @@ public class Chart: UIView {
   
   //MARK: - Public variables
   
-  public var dataSource: DataSource?
-  public var selectionStyle: SegmentSelectionStyle = .Grow
+  /**
+   `ChartDataSource` providing reference items and angle calulations for `Chart`'s segments
+   */
+  public var dataSource: ChartDataSource?
   
   //MARK: - Public Inspectables
   
+  // Width of the `Chart`'s segments
   @IBInspectable public var lineWidth: CGFloat = 25
+  // `Chart`'s inner padding if you need to make it smaller than it's bounds
   @IBInspectable public var padding: CGFloat = 0
+  // Colour of `Chart`'s background segment
   @IBInspectable public var chartBackgroundColor: UIColor = UIColor(white: 0.7, alpha: 0.66)
+  // Color for `Chart`'s first segment
   @IBInspectable public var beginColor: UIColor?
+  // Color for `Chart`'s last segment
   @IBInspectable public var endColor: UIColor?
-  @IBInspectable public var inactiveBeginColor = UIColor.inactiveBeginColor()
-  @IBInspectable public var inactiveEndColor = UIColor.inactiveEndColor()
   
   //MARK: - Private variables
   
-  private var chartBackgroundSegment: SegmentLayer?
-  private var chartSegmentLayers: [SegmentLayer] = []
+  private var chartBackgroundSegment: ChartSegmentLayer?
+  private var chartSegmentLayers: [ChartSegmentLayer] = []
   private var colorPalette: [UIColor] = []
-  private var grayscalePalette: [UIColor] = []
+  private var selectionStyle: SegmentSelectionStyle = .Grow
   
   //MARK: - Initializers
   
@@ -90,7 +95,7 @@ public class Chart: UIView {
    
    - returns: fully configured chart view
    */
-  public required init(frame: CGRect, lineWidth: CGFloat, dataSource: DataSource, beginColor: UIColor = UIColor.greenColor(), endColor: UIColor = UIColor.yellowColor()) {
+  public required init(frame: CGRect, lineWidth: CGFloat, dataSource: ChartDataSource, beginColor: UIColor = UIColor.greenColor(), endColor: UIColor = UIColor.yellowColor()) {
     self.lineWidth = lineWidth
     self.dataSource = dataSource
     self.beginColor = beginColor
@@ -129,15 +134,14 @@ public class Chart: UIView {
     if let backgroundSegment = chartBackgroundSegment {
       backgroundSegment.frame = bounds.largestSquareThatFits()
     } else {
-      let backgroundSegment = SegmentLayer(frame: bounds.largestSquareThatFits(), start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.CGColor)
+      let backgroundSegment = ChartSegmentLayer(frame: bounds.largestSquareThatFits(), start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.CGColor)
       layer.insertSublayer(backgroundSegment, atIndex: 0)
       chartBackgroundSegment = backgroundSegment
     }
   }
   
   /**
-   Setups `colorPalette` based on `beginColor` and `endColor`. Also setups
-   `grayscalePalette`.
+   Setups `colorPalette` based on `beginColor` and `endColor`.
    */
   private func setupColorPalettes() {
     
@@ -148,12 +152,6 @@ public class Chart: UIView {
     colorPalette = UIColor.colorRange(
       beginColor: beginColor!,
       endColor: endColor!,
-      count: source.numberOfItems()
-    )
-    
-    grayscalePalette = UIColor.colorRange(
-      beginColor: inactiveBeginColor,
-      endColor: inactiveEndColor,
       count: source.numberOfItems()
     )
   }
@@ -187,7 +185,7 @@ public class Chart: UIView {
       }
       
       guard let layer = layer(index) else {
-        let layer = SegmentLayer(
+        let layer = ChartSegmentLayer(
           frame: self.bounds.largestSquareThatFits(),
           start: source.startAngle(index),
           end: source.endAngle(index),
@@ -255,6 +253,7 @@ public class Chart: UIView {
   }
   
   //MARK: - Layer manipulation
+  
   /**
    Loops through the available layers and assigns them appropriate end cap type
    */
@@ -283,13 +282,13 @@ public class Chart: UIView {
   }
   
   /**
-   Returns a `SegmentLayer?` for a given index
+   Returns a `ChartSegmentLayer?` for a given index
    
    - parameter index: Int, index to look at
    - returns: an optional value that's `nil` when index is out of bounds, and
-   SegmentLayer when a value is found
+   ChartSegmentLayer when a value is found
    */
-  private func layer(index: Int) -> SegmentLayer? {
+  private func layer(index: Int) -> ChartSegmentLayer? {
     if index >= chartSegmentLayers.count || index < 0 {
       return nil
     } else {
@@ -408,16 +407,5 @@ public class Chart: UIView {
         }
       }
     }
-  }
-  
-}
-
-private extension UIColor {
-  static func inactiveBeginColor() -> UIColor {
-    return UIColor(white: 0.5, alpha: 1.0)
-  }
-  
-  static func inactiveEndColor() -> UIColor {
-    return UIColor(white: 0.15, alpha: 1.0)
   }
 }

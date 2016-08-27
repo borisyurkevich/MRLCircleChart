@@ -24,98 +24,179 @@
 
 import Foundation
 
-public protocol DataSource {
-  var chartSegments: [Segment] { get set }
+/**
+ Protocol defining setup requirements for a `Chart`'s `dataSource`
+ */
+public protocol ChartDataSource {
+  var segments: [ChartSegment] { get set }
   var maxValue: Double { get set }
 }
 
-extension DataSource {
+extension ChartDataSource {
   
   //MARK: - Item Helpers
   
+  /**
+   Utility function that returns count of items
+   */
   public func numberOfItems() -> Int {
-    return chartSegments.count
+    return segments.count
   }
   
-  public func item(index: Int) -> Segment? {
-    guard index < chartSegments.count
+  /**
+   Utitlity function that return sthe item at a given index
+   
+   - parameter index: index to check
+   
+   - returns: nil if no item found at index, or a `ChartSegment` if found
+   */
+  public func item(index: Int) -> ChartSegment? {
+    guard index < segments.count
       && index >= 0 else {
         return nil
     }
-    return chartSegments[index]
+    return segments[index]
   }
   
-  public func indexOf(item: Segment) -> Int {
-    guard let index = chartSegments.indexOf({ (itemToCheck: Segment) -> Bool in
+  /**
+   Utility function that returns the index of a given item
+   
+   - parameter item: ChartSegment to be checked
+   
+   - returns: `nil` if `item` is not found, otherwise the index
+   */
+  public func indexOf(item: ChartSegment) -> Int? {
+    guard let index = segments.indexOf({ (itemToCheck: ChartSegment) -> Bool in
       return itemToCheck == item
     }) else {
-      return NSNotFound
+      return nil
     }
     return index
   }
   
+  /**
+   Utility function that returns the total value of all segments added up
+   */
   public func totalValue() -> Double {
-    let value = chartSegments.reduce(0) { (sum, next) -> Double in
+    let value = segments.reduce(0) { (sum, next) -> Double in
       return sum + next.value
     }
     return value
   }
   
+  /**
+   Utility function that returns the value represented by a full circle
+   */
   public func maxValue() -> Double {
     return max(totalValue(), maxValue)
   }
   
+  /**
+   Utility function that checks whether segments fill the whole chart
+   */
   public func isFullCircle() -> Bool {
     return maxValue <= totalValue()
   }
   
   //MARK: - Data Manipulation
   
-  public mutating func remove(index: Int) -> Segment? {
+  /**
+   Removes item at a given index and returns it
+   
+   - paramameter index: index for the item to remove, should be `index < segments.count`
+   
+   - returns: ChartSegment? nil or ChartSegment at the given index
+   */
+  public mutating func remove(index: Int) -> ChartSegment? {
     guard let _ = item(index) else {
       return nil
     }
-    return chartSegments.removeAtIndex(index)
-  }
-  
-  public mutating func insert(item: Segment, index: Int) {
-    chartSegments.insert(item, atIndex: index)
-  }
-  
-  public mutating func append(item: Segment) {
-    chartSegments.append(item)
+    return segments.removeAtIndex(index)
   }
   
   /**
-   Empties dataSource's chart segments.
+   Inserts an item at a given index
+   
+   - parameter item `ChartSegment` to insert
+   - parameter index index to insert it at, requires `index <= segments.count`
+   */
+  public mutating func insert(item: ChartSegment, index: Int) {
+    guard index <= segments.count else {
+      return
+    }
+    
+    segments.insert(item, atIndex: index)
+  }
+  
+  /**
+   Appends an item at the end of `segments`
+   
+   - parameter item ChartSegment to append
+  */
+  public mutating func append(item: ChartSegment) {
+    segments.append(item)
+  }
+  
+  /**
+   Empties `segments` by removing all items.
    */
   public mutating func empty() {
-    while chartSegments.count > 0 {
+    while segments.count > 0 {
       remove(0)
     }
   }
   
   //MARK: - Public Angle Helpers
   
+  /**
+   Utility function for retrieving the end angle of the last segment
+   
+   - returns: end angle for the last segment or 0 if no segments are found
+   */
   public func endAngle() -> CGFloat {
     return endAngle(numberOfItems() - 1)
   }
   
   //MARK: - Angle Helpers
   
+  /**
+   Checks start angle of a segment at a given index by adding up end angle values of all previous segments
+   
+   - parameter index: index of segment to check
+   
+   - returns: CGFloat start angle of the segment or 0 if no segment found
+   */
   func startAngle(index: Int) -> CGFloat {
-    let rangeBounds = min(chartSegments.count, index)
-    let slice = chartSegments[0..<rangeBounds]
+    guard let _ = item(index) where maxValue() > 0 else {
+      return 0
+    }
+    
+    let slice = segments[0..<min(segments.count, index)]
     let angle = slice.enumerate().reduce(0) { (sum, next) -> CGFloat in
       return sum + arcAngle(next.0)
     }
+    
     return angle
   }
   
+  /**
+   Checks the end angle of a segment at a given `index` in `segments`
+   
+   - parameter index: index of segment to check
+   
+   - returns: CGFloat end angle of the segment or 0 if no segment found
+   */
   func endAngle(index: Int) -> CGFloat {
     return startAngle(index) + arcAngle(index)
   }
   
+  /**
+   Checks for the arc angle of a segment at a given `index` in `segments`
+   
+   - parameter index: index of segment to check
+   
+   - returns: CGFloat length of the arc or 0 if no segment found
+   */
   func arcAngle(index: Int) -> CGFloat {
     guard let segment = item(index) where maxValue() > 0 else {
       return 0

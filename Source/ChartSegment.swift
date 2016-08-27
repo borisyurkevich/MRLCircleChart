@@ -31,7 +31,7 @@ import Foundation
  Note: this class and it's subclasses are `Comparable` by their's `value`
  property, and `Equatable` on both `value` and `description properties.
  */
-public struct Segment: Comparable {
+public struct ChartSegment: Comparable {
   
   /**
    Value that the instance represents
@@ -39,18 +39,18 @@ public struct Segment: Comparable {
   public var value: Double
   
   /**
-   String description to accompany the `Segment's value
+   String description to accompany the `ChartSegment's value
    */
   public var valueDescription: String
   
   /**
-   Default initializer for the `Segment` class, returns a fully configured
+   Default initializer for `ChartSegment`, returns a fully configured
    instance.
    
    - parameter value:       UInt, value to represent
-   - parameter description: String, description to accompany `Segment's` value
+   - parameter description: String, description to accompany `ChartSegment's` value
    
-   - returns: `Segment` instance
+   - returns: `ChartSegment` instance
    */
   public init(value: Double, description: String) {
     self.value = value
@@ -58,14 +58,14 @@ public struct Segment: Comparable {
   }
 }
 
-public func == (lhs: Segment, rhs: Segment) -> Bool {
+public func == (lhs: ChartSegment, rhs: ChartSegment) -> Bool {
   return lhs.value == rhs.value && lhs.valueDescription == rhs.valueDescription
 }
 
-public func < (lhs: Segment, rhs: Segment) -> Bool {
+public func < (lhs: ChartSegment, rhs: ChartSegment) -> Bool {
   return lhs.value < rhs.value
 }
 
-public func > (lhs: Segment, rhs: Segment) -> Bool {
+public func > (lhs: ChartSegment, rhs: ChartSegment) -> Bool {
   return lhs.value > rhs.value
 }
