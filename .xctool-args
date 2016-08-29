@@ -1,0 +1,5 @@
+[
+  "-workspace", "Example/MRLCircleChart.xcworkspace",
+  "-scheme", "MRLCircleChart-Example",
+  "-sdk", "iphonesimulator"
+]
