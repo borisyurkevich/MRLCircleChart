@@ -9,8 +9,9 @@ before_install:
 - if brew outdated | grep -qx xctool; then brew update xctool; fi
 script:
 - set -o pipefail
-- xctool ONLY_ACTIVE_ARCH=NO | xcpretty
-- xctool test ONLY_ACTIVE_ARCH=NO | xcpretty
+- export ONLY_ACTIVE_ARCH=NO
+- xctool
+- xctool test
 notifications:
   slack:
     rooms:
