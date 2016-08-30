@@ -4,13 +4,13 @@ PODS:
   - FBSnapshotTestCase/Core (2.1.2)
   - FBSnapshotTestCase/SwiftSupport (2.1.2):
     - FBSnapshotTestCase/Core
-  - MRLCircleChart (0.4.0)
   - Nimble (4.1.0)
   - Nimble-Snapshots (4.1.0):
     - FBSnapshotTestCase (~> 2.0)
     - Nimble
     - Quick
   - Quick (0.9.3)
+  - MRLCircleChart (0.4.2)
 
 DEPENDENCIES:
   - MRLCircleChart (from `../`)
@@ -22,10 +22,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   FBSnapshotTestCase: 918c55861356ee83aee7843d759f55a18ff6982b
-  MRLCircleChart: 719b44a83a4a5ccc5e56c4094d8e244dd5affc7e
   Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19
   Nimble-Snapshots: 2da4d2ec829b458d6886c06812c52493fce284c9
   Quick: 13a2a2b19a5d8e3ed4fd0c36ee46597fd77ebf71
+  MRLCircleChart: 25ac72950d6842d2571994dfb8fe03bbf36da3f2
 
 PODFILE CHECKSUM: 547127521ec83495b04be36b59ccdd8e43f0054d
 
