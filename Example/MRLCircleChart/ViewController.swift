@@ -38,16 +38,14 @@ class ViewController: UIViewController {
   
   //MARK: - Instance Variables
   
-  var dataSource = MRLCircleChart.NumberChartDataSource<Double>(items: [], maxValue: Data.maxValue)
+  var dataSource = MRLCircleChart.NumberChartDataSource(items: Data.values, maxValue: Data.maxValue)
   
   //MARK: - Lifecycle
   
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    setupData()
     setupChart()
-    
     runDemo()
   }
   
@@ -57,12 +55,6 @@ class ViewController: UIViewController {
     chart.dataSource = dataSource
     chart.selectHandler = { index in print("selected \(index)") }
     chart.deselectHandler = { index in print("deselected \(index)") }
-  }
-  
-  private func setupData() {
-    dataSource.segments = Data.values.map { (value: Double) -> MRLCircleChart.ChartSegment in
-      return MRLCircleChart.ChartSegment(value: value, description: "value: \(value)")
-    }.sort { $0 < $1 }
   }
   
   //MARK: - DemoActions

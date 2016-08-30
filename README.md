@@ -4,7 +4,7 @@
 [![Platform](https://img.shields.io/cocoapods/p/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 [![Version](https://img.shields.io/cocoapods/v/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Stories in Progress](https://badge.waffle.io/waffleio/waffle.io.svg?label=waffle%3Ain%20progress&title=In%20Progress)](http://waffle.io/waffleio/waffle.io)
+[![Stories in Ready](https://badge.waffle.io/mlisik/MRLCircleChart.png?label=ready&title=Ready)](https://waffle.io/mlisik/MRLCircleChart)
 [![License](https://img.shields.io/cocoapods/l/MRLCircleChart.svg?style=flat)](http://cocoapods.org/pods/MRLCircleChart)
 
 ![Animated .gif of chart reloading it's data](https://raw.githubusercontent.com/mlisik/MRLCircleChart/master/Screenshots/mrlcirclechart.gif?raw=true "Reloading chart data")

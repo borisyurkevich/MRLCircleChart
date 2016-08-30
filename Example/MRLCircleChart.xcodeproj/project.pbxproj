@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		50863DE477E75E1AEC40FD16 /* Pods_MRLCircleChart_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEBA082CA3BCFC7A6AAA7A9C /* Pods_MRLCircleChart_Example.framework */; };
 		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		6D78064E1D71B1C70030F545 /* ChartViewSnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D78064D1D71B1C70030F545 /* ChartViewSnapshotTestCase.swift */; };
+		6DEBA87F1D71BAA200ED2EB9 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DEBA87E1D71BAA200ED2EB9 /* main.swift */; };
+		A14A243185E5333DF4300C80 /* Pods_MRLCircleChart_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEBA082CA3BCFC7A6AAA7A9C /* Pods_MRLCircleChart_Example.framework */; };
 		F6A95E7BE0E185651D0F5D83 /* Pods_MRLCircleChart_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEF477D43C6F8674502F410C /* Pods_MRLCircleChart_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,8 +29,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		20176FC6077E2A6D47867179 /* Pods-MRLCircleChart_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MRLCircleChart_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MRLCircleChart_Example/Pods-MRLCircleChart_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		36AC3325E3CE16BA50CF76CF /* Pods-MRLCircleChart_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MRLCircleChart_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MRLCircleChart_Example/Pods-MRLCircleChart_Example.release.xcconfig"; sourceTree = "<group>"; };
 		52FB9CBA5AC8C99D4F4C55CF /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* MRLCircleChart_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MRLCircleChart_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -39,8 +39,13 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* MRLCircleChart_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MRLCircleChart_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		671CE3A4490754399FB8AFD3 /* Pods-MRLCircleChart_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MRLCircleChart_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MRLCircleChart_Example/Pods-MRLCircleChart_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		6D78064C1D71B1C70030F545 /* MRLCircleChart_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MRLCircleChart_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
+		6D78064D1D71B1C70030F545 /* ChartViewSnapshotTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartViewSnapshotTestCase.swift; sourceTree = "<group>"; };
+		6DEBA87E1D71BAA200ED2EB9 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = main.swift; path = MRLCircleChart/main.swift; sourceTree = "<group>"; };
 		99D787778701D1CC7237B620 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		AEBA082CA3BCFC7A6AAA7A9C /* Pods_MRLCircleChart_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MRLCircleChart_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B1B1E0D977895614BEC72AE9 /* Pods-MRLCircleChart_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MRLCircleChart_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MRLCircleChart_Example/Pods-MRLCircleChart_Example.release.xcconfig"; sourceTree = "<group>"; };
 		CF23CC561D0B8C790F14AD48 /* Pods-MRLCircleChart_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MRLCircleChart_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MRLCircleChart_Tests/Pods-MRLCircleChart_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		D539CB166F889A51EB09496F /* Pods-MRLCircleChart_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MRLCircleChart_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MRLCircleChart_Tests/Pods-MRLCircleChart_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		E7B771EBB6E00A5E82B7D37F /* MRLCircleChart.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = MRLCircleChart.podspec; path = ../MRLCircleChart.podspec; sourceTree = "<group>"; };
@@ -52,7 +57,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				50863DE477E75E1AEC40FD16 /* Pods_MRLCircleChart_Example.framework in Frameworks */,
+				A14A243185E5333DF4300C80 /* Pods_MRLCircleChart_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +84,7 @@
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				6DEBA87E1D71BAA200ED2EB9 /* main.swift */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
 				607FACD21AFB9204008FA782 /* Example for MRLCircleChart */,
 				607FACE81AFB9204008FA782 /* Tests */,
@@ -125,6 +131,7 @@
 			isa = PBXGroup;
 			children = (
 				607FACE91AFB9204008FA782 /* Supporting Files */,
+				6D78064D1D71B1C70030F545 /* ChartViewSnapshotTestCase.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -132,6 +139,7 @@
 		607FACE91AFB9204008FA782 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6D78064C1D71B1C70030F545 /* MRLCircleChart_Tests-Bridging-Header.h */,
 				607FACEA1AFB9204008FA782 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -150,10 +158,10 @@
 		A87498AE88CA71C91AB4AEFB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				20176FC6077E2A6D47867179 /* Pods-MRLCircleChart_Example.debug.xcconfig */,
-				36AC3325E3CE16BA50CF76CF /* Pods-MRLCircleChart_Example.release.xcconfig */,
 				CF23CC561D0B8C790F14AD48 /* Pods-MRLCircleChart_Tests.debug.xcconfig */,
 				D539CB166F889A51EB09496F /* Pods-MRLCircleChart_Tests.release.xcconfig */,
+				671CE3A4490754399FB8AFD3 /* Pods-MRLCircleChart_Example.debug.xcconfig */,
+				B1B1E0D977895614BEC72AE9 /* Pods-MRLCircleChart_Example.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -165,12 +173,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "MRLCircleChart_Example" */;
 			buildPhases = (
-				4B0538D63FA0E627E2284B83 /* [CP] Check Pods Manifest.lock */,
+				9BD0777C8B4D08BC8C6B80CE /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				B53EEF684BF7398ECC0545C8 /* [CP] Embed Pods Frameworks */,
-				71020D8FF7DF45F6FAFFBECF /* [CP] Copy Pods Resources */,
+				D0D6A35400603CD260596BF5 /* [CP] Embed Pods Frameworks */,
+				3C26C2198BD8A32357EBC7EB /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -208,7 +216,7 @@
 		607FACC81AFB9204008FA782 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 0720;
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = CocoaPods;
 				TargetAttributes = {
@@ -276,22 +284,7 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		4B0538D63FA0E627E2284B83 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		71020D8FF7DF45F6FAFFBECF /* [CP] Copy Pods Resources */ = {
+		3C26C2198BD8A32357EBC7EB /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -321,7 +314,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MRLCircleChart_Tests/Pods-MRLCircleChart_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		B53EEF684BF7398ECC0545C8 /* [CP] Embed Pods Frameworks */ = {
+		9BD0777C8B4D08BC8C6B80CE /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D0D6A35400603CD260596BF5 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -360,6 +368,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				6DEBA87F1D71BAA200ED2EB9 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D78064E1D71B1C70030F545 /* ChartViewSnapshotTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -484,7 +494,7 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 20176FC6077E2A6D47867179 /* Pods-MRLCircleChart_Example.debug.xcconfig */;
+			baseConfigurationReference = 671CE3A4490754399FB8AFD3 /* Pods-MRLCircleChart_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MRLCircleChart/Info.plist;
@@ -498,7 +508,7 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 36AC3325E3CE16BA50CF76CF /* Pods-MRLCircleChart_Example.release.xcconfig */;
+			baseConfigurationReference = B1B1E0D977895614BEC72AE9 /* Pods-MRLCircleChart_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = MRLCircleChart/Info.plist;
@@ -515,6 +525,7 @@
 			baseConfigurationReference = CF23CC561D0B8C790F14AD48 /* Pods-MRLCircleChart_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -527,6 +538,8 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/MRLCircleChart_Tests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MRLCircleChart_Example.app/MRLCircleChart_Example";
 			};
 			name = Debug;
@@ -536,6 +549,7 @@
 			baseConfigurationReference = D539CB166F889A51EB09496F /* Pods-MRLCircleChart_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ENABLE_MODULES = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -544,6 +558,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Tests/MRLCircleChart_Tests-Bridging-Header.h";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MRLCircleChart_Example.app/MRLCircleChart_Example";
 			};
 			name = Release;
