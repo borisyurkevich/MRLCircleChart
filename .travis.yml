@@ -6,12 +6,9 @@ before_install:
 - gem install cocoapods
 - gem install xcpretty
 - pod install --project-directory=Example --repo-update
-- if brew outdated | grep -qx xctool; then brew update xctool; fi
 script:
 - set -o pipefail
-- export ONLY_ACTIVE_ARCH=NO
-- xctool
-- xctool test
+- xcodebuild -workspace Example/MRLCircleChart.xcworkspace -scheme MRLCircleChart-Tests -sdk iphonesimulator test | xcpretty
 notifications:
   slack:
     rooms:
