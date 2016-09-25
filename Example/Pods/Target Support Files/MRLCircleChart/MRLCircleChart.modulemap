@@ -1,6 +1,0 @@
-framework module MRLCircleChart {
-  umbrella header "MRLCircleChart-umbrella.h"
-
-  export *
-  module * { export * }
-}
