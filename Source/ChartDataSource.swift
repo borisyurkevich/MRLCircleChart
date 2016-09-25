@@ -50,7 +50,7 @@ extension ChartDataSource {
    
    - returns: nil if no item found at index, or a `ChartSegment` if found
    */
-  public func item(index: Int) -> ChartSegment? {
+  public func item(at index: Int) -> ChartSegment? {
     guard index < segments.count
       && index >= 0 else {
         return nil
@@ -65,8 +65,8 @@ extension ChartDataSource {
    
    - returns: `nil` if `item` is not found, otherwise the index
    */
-  public func indexOf(item: ChartSegment) -> Int? {
-    guard let index = segments.indexOf({ (itemToCheck: ChartSegment) -> Bool in
+  public func index(of item: ChartSegment) -> Int? {
+    guard let index = segments.index(where: { (itemToCheck: ChartSegment) -> Bool in
       return itemToCheck == item
     }) else {
       return nil
@@ -107,11 +107,11 @@ extension ChartDataSource {
    
    - returns: ChartSegment? nil or ChartSegment at the given index
    */
-  public mutating func remove(index: Int) -> ChartSegment? {
-    guard let _ = item(index) else {
+  public mutating func remove(at index: Int) -> ChartSegment? {
+    guard let _ = item(at: index) else {
       return nil
     }
-    return segments.removeAtIndex(index)
+    return segments.remove(at: index)
   }
   
   /**
@@ -120,12 +120,12 @@ extension ChartDataSource {
    - parameter item `ChartSegment` to insert
    - parameter index index to insert it at, requires `index <= segments.count`
    */
-  public mutating func insert(item: ChartSegment, index: Int) {
+  public mutating func insert(_ item: ChartSegment, index: Int) {
     guard index <= segments.count else {
       return
     }
     
-    segments.insert(item, atIndex: index)
+    segments.insert(item, at: index)
   }
   
   /**
@@ -133,7 +133,7 @@ extension ChartDataSource {
    
    - parameter item ChartSegment to append
   */
-  public mutating func append(item: ChartSegment) {
+  public mutating func append(_ item: ChartSegment) {
     segments.append(item)
   }
   
@@ -142,7 +142,7 @@ extension ChartDataSource {
    */
   public mutating func empty() {
     while segments.count > 0 {
-      remove(0)
+      remove(at: 0)
     }
   }
   
@@ -154,7 +154,7 @@ extension ChartDataSource {
    - returns: end angle for the last segment or 0 if no segments are found
    */
   public func endAngle() -> CGFloat {
-    return endAngle(numberOfItems() - 1)
+    return endAngle(for: numberOfItems() - 1)
   }
   
   //MARK: - Angle Helpers
@@ -166,14 +166,14 @@ extension ChartDataSource {
    
    - returns: CGFloat start angle of the segment or 0 if no segment found
    */
-  func startAngle(index: Int) -> CGFloat {
-    guard let _ = item(index) where maxValue() > 0 else {
+  func startAngle(for index: Int) -> CGFloat {
+    guard let _ = item(at: index), maxValue() > 0 else {
       return 0
     }
     
     let slice = segments[0..<min(segments.count, index)]
-    let angle = slice.enumerate().reduce(0) { (sum, next) -> CGFloat in
-      return sum + arcAngle(next.0)
+    let angle = slice.enumerated().reduce(0) { (sum, next) -> CGFloat in
+      return sum + arcAngle(for: next.0)
     }
     
     return angle
@@ -186,8 +186,8 @@ extension ChartDataSource {
    
    - returns: CGFloat end angle of the segment or 0 if no segment found
    */
-  func endAngle(index: Int) -> CGFloat {
-    return startAngle(index) + arcAngle(index)
+  func endAngle(for index: Int) -> CGFloat {
+    return startAngle(for: index) + arcAngle(for: index)
   }
   
   /**
@@ -197,8 +197,8 @@ extension ChartDataSource {
    
    - returns: CGFloat length of the arc or 0 if no segment found
    */
-  func arcAngle(index: Int) -> CGFloat {
-    guard let segment = item(index) where maxValue() > 0 else {
+  func arcAngle(for index: Int) -> CGFloat {
+    guard let segment = item(at: index), maxValue() > 0 else {
       return 0
     }
     let angle = segment.value / maxValue() * 2 * M_PI

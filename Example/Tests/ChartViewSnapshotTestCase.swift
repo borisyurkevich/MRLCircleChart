@@ -14,7 +14,7 @@ import UIKit
 @testable import MRLCircleChart
 
 struct Configuration {
-  static let frame = CGRect(origin: CGPointZero, size: CGSize(width: 128, height: 128))
+  static let frame = CGRect(origin: CGPoint.zero, size: CGSize(width: 128, height: 128))
   static let lineWidth: CGFloat = 20
   static let emptyDataSource: MRLCircleChart.ChartDataSource = MRLCircleChart.NumberChartDataSource(items: [], maxValue: 100)
   static let dataSource: MRLCircleChart.ChartDataSource = MRLCircleChart.NumberChartDataSource(items: [10,20,30], maxValue: 100)
@@ -65,7 +65,7 @@ class ChartViewSnapshotTestCase: QuickSpec, SnapshotSpec {
         
         context("when it has background colour defined") {
           beforeEach() {
-            chart.chartBackgroundColor = UIColor.redColor()
+            chart.chartBackgroundColor = UIColor.red
           }
           
           it("should have the correct background color") {
@@ -88,8 +88,8 @@ class ChartViewSnapshotTestCase: QuickSpec, SnapshotSpec {
         
         context("and begin-end colors defined") {
           beforeEach() {
-            chart.beginColor = UIColor.yellowColor()
-            chart.endColor = UIColor.greenColor()
+            chart.beginColor = UIColor.yellow
+            chart.endColor = UIColor.green
             chart.reloadData(animated: false)
           }
           
@@ -119,7 +119,7 @@ class ChartViewSnapshotTestCase: QuickSpec, SnapshotSpec {
         
         context("when an item is removed") {
           beforeEach() {
-            chart.dataSource?.remove(0)
+            _ = chart.dataSource?.remove(at: 0)
           }
           
           it("should reflect the state of the data source") {

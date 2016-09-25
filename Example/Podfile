@@ -16,7 +16,7 @@ end
 post_install do |installer|
   configure_spacing(installer, '2')
   installer.pods_project.targets.each do |target|
-    setup_swift_version(target, 3.0)
+    setup_swift_version(target, '3.0')
   end
 end
 

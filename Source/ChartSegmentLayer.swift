@@ -62,14 +62,14 @@ class ChartSegmentLayer: CALayer {
   @NSManaged var startAngle: CGFloat
   @NSManaged var endAngle: CGFloat
   @NSManaged var lineWidth: CGFloat
-  @NSManaged var color: CGColorRef
+  @NSManaged var color: CGColor
   @NSManaged var padding: CGFloat
   
   var animationDuration: Double = Constants.animationDuration
   
   @objc
   enum ChartSegmentCapType: Int {
-    case None, Begin, End, BothEnds
+    case none, begin, end, bothEnds
   }
   
   @NSManaged var capType: ChartSegmentCapType
@@ -102,7 +102,7 @@ class ChartSegmentLayer: CALayer {
    - returns: a fully configured `ChartSegmentLayer` instance
    */
   
-  required init(frame: CGRect, start: CGFloat, end: CGFloat, lineWidth: CGFloat, padding: CGFloat = 0, color: CGColorRef) {
+  required init(frame: CGRect, start: CGFloat, end: CGFloat, lineWidth: CGFloat, padding: CGFloat = 0, color: CGColor) {
     super.init()
     
     self.frame = frame
@@ -115,7 +115,7 @@ class ChartSegmentLayer: CALayer {
     self.commonInit()
   }
   
-  override init(layer: AnyObject) {
+  override init(layer: Any) {
     super.init(layer: layer)
     self.commonInit()
   }
@@ -129,13 +129,13 @@ class ChartSegmentLayer: CALayer {
    Common initialization point, to be used for any operation that are common
    to all initializers and can be performed after `self` is available.
    */
-  private func commonInit() {
-    contentsScale = UIScreen.mainScreen().scale
+  fileprivate func commonInit() {
+    contentsScale = UIScreen.main.scale
     transform = CATransform3DMakeRotation(CGFloat(-M_PI / 2), 0, 0, 1)
   }
   
-  override func encodeWithCoder(aCoder: NSCoder) {
-    super.encodeWithCoder(aCoder)
+  override func encode(with aCoder: NSCoder) {
+    super.encode(with: aCoder)
   }
   
   //MARK: - Animation Overrides
@@ -149,7 +149,7 @@ class ChartSegmentLayer: CALayer {
    
    - returns: a custom animation for specified properties
    */
-  override func actionForKey(event: String) -> CAAction? {
+  override func action(forKey event: String) -> CAAction? {
     
     if superlayer == nil {
       return nil
@@ -169,13 +169,13 @@ class ChartSegmentLayer: CALayer {
       return animationForAngle(event)
     }
     
-    return super.actionForKey(event)
+    return super.action(forKey: event)
   }
   
   /**
    Helper function to generate similar `CAAnimations` easily
    */
-  func animation(key: String, toValue: AnyObject?, fromValue: AnyObject) -> CABasicAnimation {
+  func animation(_ key: String, toValue: AnyObject?, fromValue: AnyObject) -> CABasicAnimation {
     let animation = CABasicAnimation(keyPath: key)
     animation.duration = animationDuration
     animation.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseOut)
@@ -188,15 +188,15 @@ class ChartSegmentLayer: CALayer {
   /**
    Provides an animation tailored for the start- and endAngle properties.
    */
-  func animationForAngle(key: String) -> CAAction {
+  func animationForAngle(_ key: String) -> CAAction {
     
-    var fromValue: AnyObject = 2 * CGFloat(M_PI)
+    var fromValue: AnyObject = (2 * CGFloat(M_PI)) as AnyObject
     
-    if let value = presentationLayer()?.valueForKey(key) {
-      fromValue = value
+    if let value = presentation()?.value(forKey: key) {
+      fromValue = value as AnyObject
     } else {
-      if let value = valueForKey(key) {
-        fromValue = value
+      if let value = value(forKey: key) {
+        fromValue = value as AnyObject
       }
     }
     
@@ -210,8 +210,8 @@ class ChartSegmentLayer: CALayer {
     
     var fromValue: AnyObject = self.color
     
-    if let value = presentationLayer()?.valueForKey(PropertyKeys.colorKey) {
-      fromValue = value
+    if let value = presentation()?.value(forKey: PropertyKeys.colorKey) {
+      fromValue = value as AnyObject
     }
     
     return animation(PropertyKeys.colorKey, toValue:nil, fromValue: fromValue)
@@ -222,7 +222,7 @@ class ChartSegmentLayer: CALayer {
    * `removeFromSuperlayer` when the animation completes, and provides a
    * `completion` closure that is run after the `removeFromSuperlayer` call.
    */
-  func animateRemoval(startAngle exitingStartAngle: CGFloat, endAngle exitingEndAngle: CGFloat, completion: () -> ()) {
+  func animateRemoval(startAngle exitingStartAngle: CGFloat, endAngle exitingEndAngle: CGFloat, completion: @escaping () -> ()) {
     CATransaction.begin()
     CATransaction.setCompletionBlock({
       self.removeFromSuperlayer()
@@ -239,37 +239,37 @@ class ChartSegmentLayer: CALayer {
    * Animates the insertion of the layer, given an initial `startAngle` and,
    * optionally, an initial `endAngle` (defaults to startAngle).
    */
-  func animateInsertion(startAngle: CGFloat, endAngle: CGFloat? = nil, animated: Bool = true) {
+  func animateInsertion(_ startAngle: CGFloat, endAngle: CGFloat? = nil, animated: Bool = true) {
     let initialEndAngle = endAngle == nil ? startAngle : endAngle!
     
     CATransaction.begin()
     CATransaction.setAnimationDuration(animated ? animationDuration : 0)
-    self.addAnimation(animation(PropertyKeys.startAngleKey, toValue: self.startAngle, fromValue: startAngle), forKey: PropertyKeys.startAngleKey)
-    self.addAnimation(animation(PropertyKeys.endAngleKey, toValue: self.endAngle, fromValue: initialEndAngle), forKey: PropertyKeys.endAngleKey)
+    self.add(animation(PropertyKeys.startAngleKey, toValue: self.startAngle as AnyObject?, fromValue: startAngle as AnyObject), forKey: PropertyKeys.startAngleKey)
+    self.add(animation(PropertyKeys.endAngleKey, toValue: self.endAngle as AnyObject?, fromValue: initialEndAngle as AnyObject), forKey: PropertyKeys.endAngleKey)
     
     CATransaction.commit()
   }
   
-  override class func needsDisplayForKey(key: String) -> Bool {
+  override class func needsDisplay(forKey key: String) -> Bool {
     if PropertyKeys.needsDisplayProperties.contains(key) {
       return true
     }
-    return super.needsDisplayForKey(key)
+    return super.needsDisplay(forKey: key)
   }
   
   //MARK: - Drawing
   
-  override func drawInContext(ctx: CGContext) {
-    drawBaseSegment(ctx)
-    drawCaps(ctx)
+  override func draw(in ctx: CGContext) {
+    drawBaseSegment(in: ctx)
+    drawCaps(in: ctx)
   }
   
   //MARK: - Hit Testing
   
-  override func containsPoint(point: CGPoint) -> Bool {
-    return ([.BothEnds, .Begin].contains(capType) && pathContainsPoint(capPath(startAngle, start: true), point: point))
-      || ([.BothEnds, .End].contains(capType) && pathContainsPoint(capPath(endAngle, start: false), point: point))
-      || pathContainsPoint(baseSegmentPath(), point: point)
+  override func contains(_ point: CGPoint) -> Bool {
+    return ([.bothEnds, .begin].contains(capType) && capPath(startAngle, start: true).contains(point))
+      || ([.bothEnds, .end].contains(capType) && capPath(endAngle, start: false).contains(point))
+      || baseSegmentPath().contains(point)
   }
 }
 
@@ -277,36 +277,36 @@ class ChartSegmentLayer: CALayer {
  Provides ChartSegmentLayer with path-calculations
  */
 extension ChartSegmentLayer {
-  private func drawBaseSegment(ctx: CGContext) {
-    drawPath(ctx, path: baseSegmentPath())
+  fileprivate func drawBaseSegment(in ctx: CGContext) {
+    drawPath(in: ctx, path: baseSegmentPath())
   }
   
-  private func drawCaps(ctx: CGContext) {
-    if [.BothEnds, .Begin].contains(capType) {
-      drawCap(ctx, angle: startAngle, start: true)
+  fileprivate func drawCaps(in ctx: CGContext) {
+    if [.bothEnds, .begin].contains(capType) {
+      drawCap(in: ctx, angle: startAngle, start: true)
     }
     
-    if [.BothEnds, .End].contains(capType) {
-      drawCap(ctx, angle: endAngle, start: false)
+    if [.bothEnds, .end].contains(capType) {
+      drawCap(in: ctx, angle: endAngle, start: false)
     }
   }
   
-  private func drawPath(ctx: CGContext, path: CGPath) {
-    CGContextBeginPath(ctx)
-    CGContextAddPath(ctx, path)
-    CGContextSetFillColorWithColor(ctx, color)
-    CGContextDrawPath(ctx, .Fill)
+  fileprivate func drawPath(in ctx: CGContext, path: CGPath) {
+    ctx.beginPath()
+    ctx.addPath(path)
+    ctx.setFillColor(color)
+    ctx.drawPath(using: .fill)
   }
   
-  private func pointOnCircle(center: CGPoint, radius: CGFloat, angle: CGFloat) -> CGPoint {
+  fileprivate func pointOnCircle(_ center: CGPoint, radius: CGFloat, angle: CGFloat) -> CGPoint {
     return CGPoint(
       x: center.x + radius * cos(angle),
       y: center.y + radius * sin(angle)
     )
   }
   
-  private func drawCap(ctx: CGContext, angle: CGFloat, start: Bool) {
-    drawPath(ctx, path: capPath(angle, start: start))
+  fileprivate func drawCap(in ctx: CGContext, angle: CGFloat, start: Bool) {
+    drawPath(in: ctx, path: capPath(angle, start: start))
   }
   
   /**
@@ -317,7 +317,7 @@ extension ChartSegmentLayer {
    
    - returns: path for drawing the defined cap
    */
-  private func capPath(angle: CGFloat, start: Bool) -> CGPathRef {
+  fileprivate func capPath(_ angle: CGFloat, start: Bool) -> CGPath {
     let capRadius = abs(outerRadius - innerRadius) / 2
     let capCenterDistance = outerRadius - capRadius
     let capStartAngle =  CGFloat(M_PI) + angle
@@ -331,7 +331,7 @@ extension ChartSegmentLayer {
       clockwise: start
     )
     
-    return path.CGPath
+    return path.cgPath
   }
   
   /**
@@ -339,7 +339,7 @@ extension ChartSegmentLayer {
    hit testing. Radii and angle properties together with layer's bounds are used
    to calculate the path.
    */
-  private func baseSegmentPath() -> CGPathRef {
+  fileprivate func baseSegmentPath() -> CGPath {
     
     let center = bounds.center()
     
@@ -349,37 +349,25 @@ extension ChartSegmentLayer {
     
     let path = UIBezierPath()
     
-    path.moveToPoint(innerStartPoint)
-    path.addLineToPoint(outerStartPoint)
-    path.addArcWithCenter(
-      center,
+    path.move(to: innerStartPoint)
+    path.addLine(to: outerStartPoint)
+    path.addArc(
+      withCenter: center,
       radius: outerRadius,
       startAngle: self.startAngle,
       endAngle: self.endAngle,
       clockwise: true
     )
     
-    path.addLineToPoint(innerEndPoint)
-    path.addArcWithCenter(
-      center,
+    path.addLine(to: innerEndPoint)
+    path.addArc(
+      withCenter: center,
       radius: innerRadius,
       startAngle: endAngle,
       endAngle: startAngle,
       clockwise: false
     )
     
-    return path.CGPath
-  }
-  
-  /**
-   Checks that a given CGPathRef contains a given CGPoint.
-   
-   - returns: `true` if `point` is contained by the `path`
-   */
-  private func pathContainsPoint(path: CGPathRef, point: CGPoint) -> Bool {
-    var transform = CGAffineTransformIdentity
-    return withUnsafePointer(&transform, { (pointer: UnsafePointer<CGAffineTransform>) -> Bool in
-      CGPathContainsPoint(path, pointer, point, false)
-    })
+    return path.cgPath
   }
 }

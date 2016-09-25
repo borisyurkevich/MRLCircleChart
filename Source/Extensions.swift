@@ -59,7 +59,7 @@ extension UIColor {
    - returns: `[UIColor]` with number of items equal to `count`, containing a
    'gradient' of colour values between `beginColor` and `endColor`
    */
-  final class func colorRange(beginColor beginColor: UIColor, endColor: UIColor, count: Int) -> [UIColor] {
+  final class func colorRange(beginColor: UIColor, endColor: UIColor, count: Int) -> [UIColor] {
     
     var br: CGFloat = 0
     var bg: CGFloat = 0
@@ -108,7 +108,7 @@ extension UIColor {
     return components
   }
   
-  static func fromHSBComponents(components: HSBComponents) -> UIColor {
+  static func fromHSBComponents(_ components: HSBComponents) -> UIColor {
     return UIColor(
       hue: components.h,
       saturation: components.s,
@@ -125,12 +125,21 @@ extension NSCoder {
    provided `key` such as: red component is encoded under `"\(key)_red"` key and
    so on.
    */
-  func encodeCGColorRef(ref: CGColorRef, key: NSString) {
-    self.encodeFloat(Float(CGColorGetComponents(ref)[0]), forKey: "\(key)_red")
-    self.encodeFloat(Float(CGColorGetComponents(ref)[1]), forKey: "\(key)_green")
-    self.encodeFloat(Float(CGColorGetComponents(ref)[2]), forKey: "\(key)_blue")
-    self.encodeFloat(Float(CGColorGetComponents(ref)[3]), forKey: "\(key)_alpha")
+  func encodeCGColorRef(_ ref: CGColor, key: NSString) {
+    self.encode(floatFromComponent(ref.components, index: 0), forKey: "\(key)_red")
+    self.encode(floatFromComponent(ref.components, index: 1), forKey: "\(key)_green")
+    self.encode(floatFromComponent(ref.components, index: 2), forKey: "\(key)_blue")
+    self.encode(floatFromComponent(ref.components, index: 3), forKey: "\(key)_alpha")
   }
+  
+  func floatFromComponent(_ components: [CGFloat]?, index: Int) -> Float {
+    guard let component = components?[index], index < 4 else {
+      return 0
+    }
+    
+    return Float(component)
+  }
+  
   /**
    Decodes and returns a `CGColorRef` whose four color components were
    previously encoded under keys derived from the given `key` such as red
@@ -138,13 +147,13 @@ extension NSCoder {
    
    - returns: CGColorRef recontructed for a given `key`
    */
-  func decodeCGColorRefForKey(key: NSString) -> CGColorRef {
-    let red = CGFloat(self.decodeFloatForKey("\(key)_red"))
-    let green = CGFloat(self.decodeFloatForKey("\(key)_green"))
-    let blue = CGFloat(self.decodeFloatForKey("\(key)_blue"))
-    let alpha = CGFloat(self.decodeFloatForKey("\(key)_alpha"))
+  func decodeCGColorRefForKey(_ key: NSString) -> CGColor {
+    let red = CGFloat(self.decodeFloat(forKey: "\(key)_red"))
+    let green = CGFloat(self.decodeFloat(forKey: "\(key)_green"))
+    let blue = CGFloat(self.decodeFloat(forKey: "\(key)_blue"))
+    let alpha = CGFloat(self.decodeFloat(forKey: "\(key)_alpha"))
     
-    return UIColor(red: red, green: green, blue: blue, alpha: alpha).CGColor
+    return UIColor(red: red, green: green, blue: blue, alpha: alpha).cgColor
   }
 }
 
@@ -155,7 +164,7 @@ extension CGPoint {
    
    - returns: CGPoint calculated by averaging given points.
    */
-  static func midPoint(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
+  static func midPoint(_ lhs: CGPoint, rhs: CGPoint) -> CGPoint {
     return CGPoint(
       x: round((lhs.x + rhs.x) / 2),
       y: round((lhs.y + rhs.y) / 2)
