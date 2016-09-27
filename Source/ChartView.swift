@@ -31,46 +31,48 @@ import UIKit
  on it's data source for relaying values (also angle values) for each layer.
  */
 @objc
-public class Chart: UIView {
+open class Chart: UIView {
   
   //MARK: - Public Handlers
+  
+  public typealias SelectionHandler = (Int) -> ()
   
   /**
    Ran when user selects a layer via touch interaction.
    */
-  public var selectHandler: (Int) -> () = {index in }
+  open var selectHandler: SelectionHandler = {index in }
   
   /**
    Ran when a segment is deselected as a result of direct touch interaction
    */
-  public var deselectHandler: (Int) -> () = {index in }
+  open var deselectHandler: SelectionHandler = {index in }
   
   //MARK: - Public variables
   
   /**
    `ChartDataSource` providing reference items and angle calulations for `Chart`'s segments
    */
-  public var dataSource: ChartDataSource?
+  open var dataSource: ChartDataSource?
   
   //MARK: - Public Inspectables
   
   // Width of the `Chart`'s segments
-  @IBInspectable public var lineWidth: CGFloat = 25
+  @IBInspectable open var lineWidth: CGFloat = 25
   // `Chart`'s inner padding if you need to make it smaller than it's bounds
-  @IBInspectable public var padding: CGFloat = 0
+  @IBInspectable open var padding: CGFloat = 0
   // Colour of `Chart`'s background segment
-  @IBInspectable public var chartBackgroundColor: UIColor = UIColor(white: 0.7, alpha: 0.66)
+  @IBInspectable open var chartBackgroundColor: UIColor = UIColor(white: 0.7, alpha: 0.66)
   // Color for `Chart`'s first segment
-  @IBInspectable public var beginColor: UIColor?
+  @IBInspectable open var beginColor: UIColor?
   // Color for `Chart`'s last segment
-  @IBInspectable public var endColor: UIColor?
+  @IBInspectable open var endColor: UIColor?
   
   //MARK: - Private variables
   
-  private var chartBackgroundSegment: ChartSegmentLayer?
-  private var chartSegmentLayers: [ChartSegmentLayer] = []
-  private var colorPalette: [UIColor] = []
-  private var selectionStyle: SegmentSelectionStyle = .Grow
+  fileprivate var chartBackgroundSegment: ChartSegmentLayer?
+  fileprivate var chartSegmentLayers: [ChartSegmentLayer] = []
+  fileprivate var colorPalette: [UIColor] = []
+  fileprivate var selectionStyle: SegmentSelectionStyle = .grow
   
   //MARK: - Initializers
   
@@ -95,7 +97,7 @@ public class Chart: UIView {
    
    - returns: fully configured chart view
    */
-  public required init(frame: CGRect, lineWidth: CGFloat, dataSource: ChartDataSource, beginColor: UIColor = UIColor.greenColor(), endColor: UIColor = UIColor.yellowColor()) {
+  public required init(frame: CGRect, lineWidth: CGFloat, dataSource: ChartDataSource, beginColor: UIColor = UIColor.green, endColor: UIColor = UIColor.yellow) {
     self.lineWidth = lineWidth
     self.dataSource = dataSource
     self.beginColor = beginColor
@@ -110,7 +112,7 @@ public class Chart: UIView {
   
   //MARK: - Public Overrides
   
-  override public func layoutSubviews() {
+  override open func layoutSubviews() {
     super.layoutSubviews()
     updateSegmentsBounds()
     setupBackgroundSegmentIfNeeded()
@@ -121,7 +123,7 @@ public class Chart: UIView {
   /**
    Updates individual layer positoins according to bounds changes
    */
-  private func updateSegmentsBounds() {
+  fileprivate func updateSegmentsBounds() {
     for layer in chartSegmentLayers {
       layer.frame = bounds.largestSquareThatFits()
     }
@@ -130,12 +132,12 @@ public class Chart: UIView {
   /**
    Sets up background segment if needed
    */
-  private func setupBackgroundSegmentIfNeeded() {
+  fileprivate func setupBackgroundSegmentIfNeeded() {
     if let backgroundSegment = chartBackgroundSegment {
       backgroundSegment.frame = bounds.largestSquareThatFits()
     } else {
-      let backgroundSegment = ChartSegmentLayer(frame: bounds.largestSquareThatFits(), start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.CGColor)
-      layer.insertSublayer(backgroundSegment, atIndex: 0)
+      let backgroundSegment = ChartSegmentLayer(frame: bounds.largestSquareThatFits(), start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.cgColor)
+      layer.insertSublayer(backgroundSegment, at: 0)
       chartBackgroundSegment = backgroundSegment
     }
   }
@@ -143,7 +145,7 @@ public class Chart: UIView {
   /**
    Setups `colorPalette` based on `beginColor` and `endColor`.
    */
-  private func setupColorPalettes() {
+  fileprivate func setupColorPalettes() {
     
     guard let source = dataSource else {
       return
@@ -162,7 +164,7 @@ public class Chart: UIView {
    - parameter animated: specifies whether the operation will be animated, defaults to `true`
    - parameter completion: optional completion block, defaults to `{}`
    */
-  final public func reloadData(animated animated: Bool = true, completion: () -> () = {}) {
+  final public func reloadData(animated: Bool = true, completion: @escaping () -> () = {}) {
     guard let source = dataSource else {
       return
     }
@@ -179,26 +181,26 @@ public class Chart: UIView {
     
     for index in 0..<refNumber {
       
-      guard let _ = source.item(index) else {
+      guard let _ = source.item(at: index) else {
         indexesToRemove.append(index)
         continue
       }
       
-      guard let layer = layer(index) else {
+      guard let layer = layer(at: index) else {
         let layer = ChartSegmentLayer(
           frame: self.bounds.largestSquareThatFits(),
-          start: source.startAngle(index),
-          end: source.endAngle(index),
+          start: source.startAngle(for: index),
+          end: source.endAngle(for: index),
           lineWidth: lineWidth,
           padding: padding,
-          color: colorPalette[index].CGColor
+          color: colorPalette[index].cgColor
         )
-        self.layer.insertSublayer(layer, atIndex: 1)
+        self.layer.insertSublayer(layer, at: 1)
         chartSegmentLayers.append(layer)
         
         if animated {
           layer.animateInsertion(
-            source.isFullCircle() ? 0 : source.startAngle(index),
+            source.isFullCircle() ? 0 : source.startAngle(for: index),
             endAngle: source.isFullCircle() ? 0 : CGFloat(M_PI * 2)
           )
         }
@@ -206,15 +208,15 @@ public class Chart: UIView {
         continue
       }
       
-      layer.startAngle = source.startAngle(index)
-      layer.endAngle = source.endAngle(index)
-      layer.color = colorPalette[index].CGColor
+      layer.startAngle = source.startAngle(for: index)
+      layer.endAngle = source.endAngle(for: index)
+      layer.color = colorPalette[index].cgColor
       layer.lineWidth = lineWidth
       layer.padding = padding
     }
     
-    for index in indexesToRemove.reverse() {
-      guard let layer = layer(index) else {
+    for index in indexesToRemove.reversed() {
+      guard let layer = layer(at: index) else {
         continue
       }
       
@@ -226,7 +228,7 @@ public class Chart: UIView {
       layer.startAngle = 0
       layer.endAngle = 0
       
-      chartSegmentLayers.removeAtIndex(index)
+      chartSegmentLayers.remove(at: index)
       CATransaction.commit()
     }
     
@@ -237,14 +239,14 @@ public class Chart: UIView {
   /**
    Empties the `dataSource` and reloadsData() to clear all segments. Animates changes by default.
    */
-  public func empty(animated animated: Bool = true, color: UIColor? = nil) {
+  open func empty(animated: Bool = true, color: UIColor? = nil) {
     guard var source = dataSource else {
       return
     }
     
     if let layerColor = color {
       for layer in chartSegmentLayers {
-        layer.color = layerColor.CGColor
+        layer.color = layerColor.cgColor
       }
     }
     
@@ -257,25 +259,25 @@ public class Chart: UIView {
   /**
    Loops through the available layers and assigns them appropriate end cap type
    */
-  private func reassignSegmentLayerscapTypes() {
+  fileprivate func reassignSegmentLayerscapTypes() {
     
     guard let source = dataSource else {
       return
     }
     
-    for (index, segment) in chartSegmentLayers.enumerate() {
+    for (index, segment) in chartSegmentLayers.enumerated() {
       if source.isFullCircle() {
-        segment.capType = .None
+        segment.capType = .none
       } else {
         switch index {
         case 0 where chartSegmentLayers.count > 1:
-          segment.capType = .Begin
+          segment.capType = .begin
         case 0 where chartSegmentLayers.count == 1:
-          segment.capType = .BothEnds
+          segment.capType = .bothEnds
         case chartSegmentLayers.count - 1 where chartSegmentLayers.count > 1:
-          segment.capType = .End
+          segment.capType = .end
         default:
-          segment.capType = .None
+          segment.capType = .none
         }
       }
     }
@@ -288,7 +290,7 @@ public class Chart: UIView {
    - returns: an optional value that's `nil` when index is out of bounds, and
    ChartSegmentLayer when a value is found
    */
-  private func layer(index: Int) -> ChartSegmentLayer? {
+  fileprivate func layer(at index: Int) -> ChartSegmentLayer? {
     if index >= chartSegmentLayers.count || index < 0 {
       return nil
     } else {
@@ -303,9 +305,9 @@ public class Chart: UIView {
    - parameter animated: defaults to `true`, specifies whether the removal
    should be animated
    */
-  private func remove(index: Int, startAngle: CGFloat = CGFloat(M_PI * 2), endAngle: CGFloat = CGFloat(M_PI * 2), animated: Bool = true) {
+  fileprivate func remove(_ index: Int, startAngle: CGFloat = CGFloat(M_PI * 2), endAngle: CGFloat = CGFloat(M_PI * 2), animated: Bool = true) {
     
-    guard let layer = layer(index) else {
+    guard let layer = layer(at: index) else {
       return
     }
     
@@ -328,18 +330,18 @@ public class Chart: UIView {
    
    - parameter selectIndex: index to select
    */
-  public func select(index selectIndex: Int) {
+  open func select(index selectIndex: Int) {
     
     if chartSegmentLayers.count == 0 {
       return
     }
     
-    if let _ = layer(selectIndex) {
+    if let _ = layer(at: selectIndex) {
       switch selectionStyle {
-      case .None:
+      case .none:
         break
-      case .Grow:
-        for (index, layer) in chartSegmentLayers.enumerate() {
+      case .grow:
+        for (index, layer) in chartSegmentLayers.enumerated() {
           layer.selected = index == selectIndex ? !layer.selected : false
           layer.lineWidth = layer.selected ? lineWidth + 10 : lineWidth
           layer.padding = layer.selected ? padding - 10 : padding
@@ -356,16 +358,16 @@ public class Chart: UIView {
    
    - parameter se
    */
-  public func deselect(index index: Int) {
+  open func deselect(index: Int) {
     if chartSegmentLayers.count == 0 {
       return
     }
     
-    if let layer = layer(index) {
+    if let layer = layer(at: index) {
       switch selectionStyle {
-      case .None:
+      case .none:
         break
-      case .Grow:
+      case .grow:
         layer.selected = false
         layer.lineWidth = lineWidth
         layer.padding = padding
@@ -373,8 +375,8 @@ public class Chart: UIView {
     }
   }
   
-  private func selected() -> Int? {
-    for (index, layer) in chartSegmentLayers.enumerate() {
+  fileprivate func selected() -> Int? {
+    for (index, layer) in chartSegmentLayers.enumerated() {
       if layer.selected {
         return index
       }
@@ -382,16 +384,16 @@ public class Chart: UIView {
     return nil
   }
   
-  override public func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+  open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     guard let touch = touches.first,
       let firstLayer = chartSegmentLayers.first else {
         return
     }
     
-    let point = firstLayer.convertPoint(touch.locationInView(self), fromLayer: self.layer)
+    let point = firstLayer.convert(touch.location(in: self), from: self.layer)
     
-    for (index, layer) in chartSegmentLayers.enumerate() {
-      if layer.containsPoint(point) {
+    for (index, layer) in chartSegmentLayers.enumerated() {
+      if layer.contains(point) {
         if layer.selected {
           deselectHandler(index)
           deselect(index: index)

@@ -12,9 +12,9 @@ import Foundation
 /**
  Convenience implementation of `ChartDataSource` that can be initialized with a `[Number]` and will create segments
  */
-public class NumberChartDataSource: ChartDataSource {
-  public var segments: [ChartSegment]
-  public var maxValue: Double
+open class NumberChartDataSource: ChartDataSource {
+  open var segments: [ChartSegment]
+  open var maxValue: Double
   
   /**
    Designated initializer for `NumberChartDataSource`

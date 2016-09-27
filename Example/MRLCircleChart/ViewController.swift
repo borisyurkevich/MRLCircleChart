@@ -51,7 +51,7 @@ class ViewController: UIViewController {
   
   //MARK: - Setup
   
-  private func setupChart() {
+  fileprivate func setupChart() {
     chart.dataSource = dataSource
     chart.selectHandler = { index in print("selected \(index)") }
     chart.deselectHandler = { index in print("deselected \(index)") }
@@ -59,10 +59,10 @@ class ViewController: UIViewController {
   
   //MARK: - DemoActions
   
-  private func runDemo() {
-    func runAfter(time: Double, block: () -> ()) {
-      let delay = dispatch_time(DISPATCH_TIME_NOW, Int64(time * Double(NSEC_PER_SEC)))
-      dispatch_after(delay, dispatch_get_main_queue(), {
+  fileprivate func runDemo() {
+    func runAfter(_ time: Double, block: @escaping () -> ()) {
+      let delay = DispatchTime.now() + Double(Int64(time * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+      DispatchQueue.main.asyncAfter(deadline: delay, execute: {
         block()
       })
     }
@@ -78,34 +78,34 @@ class ViewController: UIViewController {
   
   //MARK: - Actions
   
-  @IBAction func reverseButtonTapped(sender: UIButton) {
-    dataSource.segments = dataSource.segments.reverse()
+  @IBAction func reverseButtonTapped(_ sender: UIButton) {
+    dataSource.segments = dataSource.segments.reversed()
     chart.reloadData()
   }
   
-  @IBAction func addButtonTapped(sender: UIButton) {
+  @IBAction func addButtonTapped(_ sender: UIButton) {
     
-    sender.enabled = false
+    sender.isEnabled = false
     
-    let value: Double = Double(random() % 75  + 25)
+    let value: Double = Double(arc4random() % 75  + 25)
     dataSource.append(ChartSegment(value: value, description: "value: \(value)"))
     
     chart.reloadData() {
-      sender.enabled = true
+      sender.isEnabled = true
     }
   }
   
-  @IBAction func removeButtonTapped(sender: UIButton) {
+  @IBAction func removeButtonTapped(_ sender: UIButton) {
     
     guard dataSource.numberOfItems() > 0 else {
       return
     }
     
-    sender.enabled = false
+    sender.isEnabled = false
     
-    dataSource.remove(dataSource.numberOfItems() - 1)
+    _ = dataSource.remove(at: dataSource.numberOfItems() - 1)
     chart.reloadData() {
-      sender.enabled = true
+      sender.isEnabled = true
     }
   
   }

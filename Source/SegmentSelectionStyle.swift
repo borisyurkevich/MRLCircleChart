@@ -32,9 +32,9 @@ public enum SegmentSelectionStyle {
   /**
    *  No change of state on segment selection.
    */
-  case None
+  case none
   /**
    *  On selection, the selected layer will grow in radius
    */
-  case Grow
+  case grow
 }
