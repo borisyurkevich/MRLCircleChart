@@ -61,6 +61,16 @@ extension UIColor {
    */
   class func colorRange(beginColor beginColor: UIColor, endColor: UIColor, count: Int) -> [UIColor] {
     
+    guard count > 0 else {
+      return []
+    }
+
+    guard count > 1 else {
+      return [beginColor]
+    }
+
+    var count = count - 1
+    
     var br: CGFloat = 0
     var bg: CGFloat = 0
     var bb: CGFloat = 0
@@ -76,16 +86,22 @@ extension UIColor {
     endColor.getRed(&er, green: &eg, blue: &eb, alpha: &ea)
     
     var result: [UIColor] = []
-    
-    for index in 0..<count {
-      let red = br - (br - er) / CGFloat(count) * CGFloat(index)
-      let green = bg - (bg - eg) / CGFloat(count) * CGFloat(index)
-      let blue = bb - (bb - eb) / CGFloat(count) * CGFloat(index)
-      let alpha = ba - (ba - ea) / CGFloat(count) * CGFloat(index)
+
+    for index in 0...count {
       
-      let color = UIColor(red:red, green:green, blue:blue, alpha:alpha)
-      
-      result.append(color)
+        func component(begin: CGFloat, end: CGFloat, index: Int) -> CGFloat {
+          return begin - (begin - end) / CGFloat(count) * CGFloat(index)
+        }
+        
+        let red = component(br, end: er, index: index)
+        let green = component(bg, end: eg, index: index)
+        let blue = component(bb, end: eb, index: index)
+        let alpha = component(ba, end: ea, index: index)
+        
+        let color = UIColor(red:red, green:green, blue:blue, alpha:alpha)
+        
+        result.append(color)
+
     }
     
     return result
