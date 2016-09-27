@@ -35,15 +35,17 @@ open class Chart: UIView {
   
   //MARK: - Public Handlers
   
+  public typealias SelectionHandler = (Int) -> ()
+  
   /**
    Ran when user selects a layer via touch interaction.
    */
-  open var selectHandler: (Int) -> () = {index in }
+  open var selectHandler: SelectionHandler = {index in }
   
   /**
    Ran when a segment is deselected as a result of direct touch interaction
    */
-  open var deselectHandler: (Int) -> () = {index in }
+  open var deselectHandler: SelectionHandler = {index in }
   
   //MARK: - Public variables
   
