@@ -15,12 +15,11 @@ Pod::Spec.new do |s|
   MRLCircleChart is a small pie/circle chart UI component written in Swift. Aims to take care of most of the work for you (just pass in a data source and configure the view) at the expense of customizability. It's a work in progress written for a secret project.
                        DESC
   s.homepage = 'https://github.com/mlisik/MRLCircleChart.git'
-  s.license  = 'MIT'
   s.author   = { 'mlisik' => 'marek.lisik@holdapp.pl' }
   s.source   = { git: 'https://github.com/mlisik/MRLCircleChart.git', tag: s.version.to_s }
+  s.license = { type: 'MIT', file: 'LICENSE' }
 
   s.platform     = :ios, '8.0'
-  s.requires_arc = true
 
   s.source_files = 'Source/*.swift'
 end
