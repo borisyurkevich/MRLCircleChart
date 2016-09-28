@@ -3,7 +3,7 @@ language: objective-c
 cache: cocoapods
 rvm: 2.2.3
 before_install:
-- gem install cocoapods
+- gem install cocoapods --pre
 - gem install xcpretty
 - pod install --project-directory=Example --repo-update
 script:
