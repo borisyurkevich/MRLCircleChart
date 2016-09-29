@@ -12,7 +12,9 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		6D12906B1D99CFFA00A6004F /* UIColorRangeTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D1290691D99CF4500A6004F /* UIColorRangeTestCase.swift */; };
 		6DCFFF411D97D3A70000C879 /* ChartViewSnapshotTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D78064D1D71B1C70030F545 /* ChartViewSnapshotTestCase.swift */; };
+		6DDB09871D9D8C25001EA534 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DDB09861D9D8C25001EA534 /* main.swift */; };
 		A14A243185E5333DF4300C80 /* Pods_MRLCircleChart_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEBA082CA3BCFC7A6AAA7A9C /* Pods_MRLCircleChart_Example.framework */; };
 		F6A95E7BE0E185651D0F5D83 /* Pods_MRLCircleChart_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEF477D43C6F8674502F410C /* Pods_MRLCircleChart_Tests.framework */; };
 /* End PBXBuildFile section */
@@ -39,8 +41,10 @@
 		607FACE51AFB9204008FA782 /* MRLCircleChart_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MRLCircleChart_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACEA1AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		671CE3A4490754399FB8AFD3 /* Pods-MRLCircleChart_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MRLCircleChart_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MRLCircleChart_Example/Pods-MRLCircleChart_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		6D1290691D99CF4500A6004F /* UIColorRangeTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorRangeTestCase.swift; sourceTree = "<group>"; };
 		6D78064C1D71B1C70030F545 /* MRLCircleChart_Tests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "MRLCircleChart_Tests-Bridging-Header.h"; sourceTree = "<group>"; };
 		6D78064D1D71B1C70030F545 /* ChartViewSnapshotTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartViewSnapshotTestCase.swift; sourceTree = "<group>"; };
+		6DDB09861D9D8C25001EA534 /* main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		99D787778701D1CC7237B620 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		AEBA082CA3BCFC7A6AAA7A9C /* Pods_MRLCircleChart_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MRLCircleChart_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B1B1E0D977895614BEC72AE9 /* Pods-MRLCircleChart_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MRLCircleChart_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-MRLCircleChart_Example/Pods-MRLCircleChart_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -105,6 +109,7 @@
 		607FACD21AFB9204008FA782 /* Example for MRLCircleChart */ = {
 			isa = PBXGroup;
 			children = (
+				6DDB09861D9D8C25001EA534 /* main.swift */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -129,6 +134,7 @@
 			children = (
 				607FACE91AFB9204008FA782 /* Supporting Files */,
 				6D7F0C9A1D91D286005A6385 /* Snapshot Tests */,
+				6D1290691D99CF4500A6004F /* UIColorRangeTestCase.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -228,6 +234,7 @@
 					607FACCF1AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
 						LastSwiftMigration = 0800;
+						ProvisioningStyle = Manual;
 					};
 					607FACE41AFB9204008FA782 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -375,6 +382,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				6DDB09871D9D8C25001EA534 /* main.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +391,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DCFFF411D97D3A70000C879 /* ChartViewSnapshotTestCase.swift in Sources */,
+				6D12906B1D99CFFA00A6004F /* UIColorRangeTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,6 +518,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MRLCircleChart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -525,6 +535,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = MRLCircleChart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
