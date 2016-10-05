@@ -107,6 +107,7 @@ extension ChartDataSource {
    
    - returns: ChartSegment? nil or ChartSegment at the given index
    */
+  @discardableResult
   public mutating func remove(at index: Int) -> ChartSegment? {
     guard let _ = item(at: index) else {
       return nil
