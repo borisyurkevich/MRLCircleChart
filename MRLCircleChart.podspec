@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name    = 'MRLCircleChart'
-  s.version = '0.3.5'
+  s.version = '0.3.6'
   s.summary = 'Small and very opinionated pie-chart view written in Swift. '
 
   s.description = <<-DESC
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
                        DESC
   s.homepage = 'https://github.com/mlisik/MRLCircleChart.git'
   s.license  = 'MIT'
-  s.author   = { 'mlisik' => 'marek.lisik@holdapp.pl' }
+  s.author   = { 'mlisik' => 'lisik.marek@gmail.com' }
   s.source   = { git: 'https://github.com/mlisik/MRLCircleChart.git', tag: s.version.to_s }
 
   s.platform     = :ios, '8.0'
