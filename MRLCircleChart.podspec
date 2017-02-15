@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name    = 'MRLCircleChart'
-  s.version = '0.3.5'
+  s.version = '0.3.6'
   s.summary = 'Small and very opinionated pie-chart view written in Swift. '
 
   s.description = <<-DESC

@@ -1,5 +1,5 @@
 PODS:
-  - MRLCircleChart (0.3.5)
+  - MRLCircleChart (0.3.6)
   - Nimble (4.1.0)
   - Quick (0.9.2)
 
@@ -13,7 +13,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  MRLCircleChart: 5cba6c79e1f91ec6b472a413bad1fee57ccd7d17
+  MRLCircleChart: fc65a5c5462f83497a29eba7c2347013dff2e321
   Nimble: 97a0a4cae5124c117115634b2d055d8c97d0af19
   Quick: 18d057bc66451eedd5d1c8dc99ba2a5db6e60226
 
