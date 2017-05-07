@@ -185,3 +185,9 @@ extension CGPoint {
     )
   }
 }
+
+extension CGFloat {
+  static var pi: CGFloat {
+    return CGFloat(Double.pi)
+  }
+}

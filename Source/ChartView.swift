@@ -136,7 +136,7 @@ open class Chart: UIView {
     if let backgroundSegment = chartBackgroundSegment {
       backgroundSegment.frame = bounds.largestSquareThatFits()
     } else {
-      let backgroundSegment = ChartSegmentLayer(frame: bounds.largestSquareThatFits(), start: 0, end: CGFloat(M_PI * 2), lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.cgColor)
+      let backgroundSegment = ChartSegmentLayer(frame: bounds.largestSquareThatFits(), start: 0, end: .pi * 2, lineWidth: lineWidth, padding: padding, color: chartBackgroundColor.cgColor)
       layer.insertSublayer(backgroundSegment, at: 0)
       chartBackgroundSegment = backgroundSegment
     }
@@ -201,7 +201,7 @@ open class Chart: UIView {
         if animated {
           layer.animateInsertion(
             source.isFullCircle() ? 0 : source.startAngle(for: index),
-            endAngle: source.isFullCircle() ? 0 : CGFloat(M_PI * 2)
+            endAngle: source.isFullCircle() ? 0 : .pi * 2
           )
         }
         
@@ -305,7 +305,7 @@ open class Chart: UIView {
    - parameter animated: defaults to `true`, specifies whether the removal
    should be animated
    */
-  fileprivate func remove(_ index: Int, startAngle: CGFloat = CGFloat(M_PI * 2), endAngle: CGFloat = CGFloat(M_PI * 2), animated: Bool = true) {
+  fileprivate func remove(_ index: Int, startAngle: CGFloat = .pi * 2, endAngle: CGFloat = .pi * 2, animated: Bool = true) {
     
     guard let layer = layer(at: index) else {
       return
