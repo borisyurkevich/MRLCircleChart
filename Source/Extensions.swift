@@ -62,7 +62,7 @@ extension UIColor {
   final class func colorRange(beginColor: UIColor, endColor: UIColor, count: Int) -> [UIColor] {
     
     guard count > 1 else {
-      return []
+      return [beginColor]
     }
     
     var count = count - 1

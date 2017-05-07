@@ -20,7 +20,15 @@ class UIColorRangeSpec: QuickSpec {
         
         let black = UIColor(red: 0, green: 0, blue: 0, alpha: 1)
         let white = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        
+
+        context("when requested a one-piece array") {
+          it("contains only perfect black") {
+            let array = UIColor.colorRange(beginColor: black, endColor: white, count: 1)
+            expect(array.count) == 1
+            expect(array) == [black]
+          }
+        }
+
         context("when requested a two-piece array") {
           let array = UIColor.colorRange(beginColor: black, endColor: white, count: 2)
           
