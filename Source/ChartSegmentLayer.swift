@@ -131,7 +131,7 @@ class ChartSegmentLayer: CALayer {
    */
   fileprivate func commonInit() {
     contentsScale = UIScreen.main.scale
-    transform = CATransform3DMakeRotation(CGFloat(-M_PI / 2), 0, 0, 1)
+    transform = CATransform3DMakeRotation(-.pi / 2, 0, 0, 1)
   }
   
   override func encode(with aCoder: NSCoder) {
@@ -190,7 +190,7 @@ class ChartSegmentLayer: CALayer {
    */
   func animationForAngle(_ key: String) -> CAAction {
     
-    var fromValue: AnyObject = (2 * CGFloat(M_PI)) as AnyObject
+    var fromValue: AnyObject = (2 * CGFloat.pi) as AnyObject
     
     if let value = presentation()?.value(forKey: key) {
       fromValue = value as AnyObject
@@ -320,8 +320,8 @@ extension ChartSegmentLayer {
   fileprivate func capPath(_ angle: CGFloat, start: Bool) -> CGPath {
     let capRadius = abs(outerRadius - innerRadius) / 2
     let capCenterDistance = outerRadius - capRadius
-    let capStartAngle =  CGFloat(M_PI) + angle
-    let capEndAngle = CGFloat(M_PI * 2) + angle
+    let capStartAngle =  .pi + angle
+    let capEndAngle = .pi * 2 + angle
     let arcCenter = pointOnCircle(center, radius: capCenterDistance, angle: angle)
     let path = UIBezierPath(
       arcCenter: arcCenter,

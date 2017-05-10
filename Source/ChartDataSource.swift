@@ -202,7 +202,6 @@ extension ChartDataSource {
     guard let segment = item(at: index), maxValue() > 0 else {
       return 0
     }
-    let angle = segment.value / maxValue() * 2 * M_PI
-    return CGFloat(angle)
+    return CGFloat(segment.value / maxValue() * 2 * .pi)
   }
 }

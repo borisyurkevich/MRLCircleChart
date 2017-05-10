@@ -62,7 +62,7 @@ extension UIColor {
   final class func colorRange(beginColor: UIColor, endColor: UIColor, count: Int) -> [UIColor] {
     
     guard count > 1 else {
-      return []
+      return [beginColor]
     }
     
     var count = count - 1
@@ -183,5 +183,11 @@ extension CGPoint {
       x: round((lhs.x + rhs.x) / 2),
       y: round((lhs.y + rhs.y) / 2)
     )
+  }
+}
+
+extension CGFloat {
+  static var pi: CGFloat {
+    return CGFloat(Double.pi)
   }
 }
