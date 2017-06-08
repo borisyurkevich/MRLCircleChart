@@ -199,10 +199,7 @@ open class Chart: UIView {
         chartSegmentLayers.append(layer)
         
         if animated {
-          layer.animateInsertion(
-            source.isFullCircle() ? 0 : source.startAngle(for: index),
-            endAngle: source.isFullCircle() ? 0 : .pi * 2
-          )
+          layer.animateInsertion(0, endAngle: 0)
         }
         
         continue
